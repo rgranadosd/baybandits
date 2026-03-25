@@ -1,17 +1,43 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
-import { Link } from 'react-router-dom'
 import './App.css'
 
-/* ── Assets ── */
+/* ── Assets — fotos ── */
+import Photo1  from './assets/photos/Photo1.jpeg'
+import Photo10 from './assets/photos/Photo10.jpeg'
+import Photo11 from './assets/photos/Photo11.jpeg'
+import LogoBB  from './assets/logos/ESCUDO BAY BANDITS 2026.PNG'
+
+/* ── Sensacions original video ── */
 const DESKTOP_VIDEO = 'https://sensacions.com/wp-content/uploads/2024/09/SENSACIONS_LANDING_V3.webm'
 const MOBILE_VIDEO  = 'https://sensacions.com/wp-content/uploads/2024/04/SENSACIONS_LANDING_VERT_V31.mp4'
-const LOGO_MARK     = 'https://sensacions.com/wp-content/uploads/2022/11/Recurso-27.png'
-const LOGO_WHITE    = 'https://sensacions.com/wp-content/uploads/2022/11/SGE_Principal-Blanco.png'
 
-const BG_CORP_DESK  = 'https://sensacions.com/wp-content/uploads/2023/06/D01_CORPORATIU.jpg'
-const BG_CORP_MOB   = 'https://sensacions.com/wp-content/uploads/2023/06/M01_CORPORATIU.jpg'
-const BG_BODA_DESK  = 'https://sensacions.com/wp-content/uploads/2023/06/D02_BODAS.jpg'
-const BG_BODA_MOB   = 'https://sensacions.com/wp-content/uploads/2023/06/M02_BODAS.jpg'
+/* ── Traduccions ── */
+const i18n = {
+  es: {
+    cta1: 'únete a los bandits',
+    cta2: 'calendario 2025',
+    contact: 'CONTACTO',
+    club: 'El Club',
+    horaris: 'Horarios Playa',
+    inscripcions: 'Inscripciones',
+    seccio: 'Sección de balonmano playa del Handbol Cooperativa Sant Boi.',
+    stats: '7 equipos · 100+ jugadores · Est. 2023',
+    legal: '© 2025 Bay Bandits · Handbol Cooperativa Sant Boi',
+    privacy: 'Política de privacidad',
+  },
+  ca: {
+    cta1: 'uneix-te als bandits',
+    cta2: 'calendari 2025',
+    contact: 'CONTACTE',
+    club: 'El Club',
+    horaris: 'Horaris Platja',
+    inscripcions: 'Inscripcions',
+    seccio: "Secció d'handbol platja de l'Handbol Cooperativa Sant Boi.",
+    stats: '7 equips · 100+ jugadors · Est. 2023',
+    legal: '© 2025 Bay Bandits · Handbol Cooperativa Sant Boi',
+    privacy: 'Política de privacitat',
+  },
+}
 
 /* ── SVG icons ── */
 const VolumeOff = () => (
@@ -29,8 +55,10 @@ function App() {
   const videoDesktopRef = useRef(null)
   const videoMobileRef  = useRef(null)
   const pageRef         = useRef(null)
-  const [muted, setMuted]     = useState(true)
+  const [muted, setMuted]       = useState(true)
   const [isMobile, setIsMobile] = useState(false)
+  const [lang, setLang]         = useState('es')
+  const t = i18n[lang]
 
   /* ── Mobile detect ── */
   useEffect(() => {
@@ -66,11 +94,16 @@ function App() {
     <div className="page" ref={pageRef}>
       <div className="page-transition" />
 
-      {/* ── Language switcher (top-right, like original) ── */}
+      {/* ── Language switcher (top-right, like sensacions) ── */}
       <nav className="lang-nav" aria-label="Idioma">
-        <span className="lang-active">CA</span>
-        <a href="#es" onClick={(e) => e.preventDefault()}>ES</a>
-        <a href="#en" onClick={(e) => e.preventDefault()}>EN</a>
+        <button
+          className={lang === 'es' ? 'lang-active' : ''}
+          onClick={() => setLang('es')}
+        >ES</button>
+        <button
+          className={lang === 'ca' ? 'lang-active' : ''}
+          onClick={() => setLang('ca')}
+        >CA</button>
       </nav>
 
       {/* ═══ SECTION 1 — Hero: Logo + Video + Mute ═══ */}
@@ -81,88 +114,84 @@ function App() {
         </div>
         <div className="overlay overlay--light" />
         <div className="hero-center anim-in">
-          <img src={LOGO_MARK} alt="Sensacions" className="logo-intro__mark" />
+          <img src={LogoBB} alt="Bay Bandits" className="logo-intro__mark" />
         </div>
         <button className="mute-toggle" onClick={toggleMute} aria-label={muted ? 'Activar so' : 'Silenciar'}>
           {muted ? <VolumeOff /> : <VolumeOn />}
         </button>
       </section>
 
-      {/* ═══ SECTION 2 — CTA Esdeveniments Corporatius (parallax bg) ═══ */}
-      <section className="snap-section cta-section cta-corp" style={{ backgroundImage: `url(${isMobile ? BG_CORP_MOB : BG_CORP_DESK})` }}>
+      {/* ═══ SECTION 2 — CTA Equips (grayscale + dark overlay) ═══ */}
+      <section className="snap-section cta-section cta-section--dark">
+        <div className="cta-bg" style={{ backgroundImage: `url(${Photo11})` }} />
         <div className="overlay overlay--dark" />
         <div className="cta-content anim-in">
-          <Link to="/corporatiu" className="cta-button">
-            esdeveniments corporatius
-          </Link>
+          <a href="https://hcsbhandbol.com/inscripciones/" target="_blank" rel="noreferrer" className="cta-button">
+            {t.cta1}
+          </a>
         </div>
       </section>
 
-      {/* ═══ SECTION 3 — CTA Casaments (parallax bg) ═══ */}
-      <section className="snap-section cta-section cta-boda" style={{ backgroundImage: `url(${isMobile ? BG_BODA_MOB : BG_BODA_DESK})` }}>
-        <div className="overlay overlay--dark" />
+      {/* ═══ SECTION 3 — CTA Temporada (grayscale + light overlay) ═══ */}
+      <section className="snap-section cta-section cta-section--light">
+        <div className="cta-bg" style={{ backgroundImage: `url(${Photo10})` }} />
+        <div className="overlay overlay--light-wash" />
         <div className="cta-content anim-in">
-          <Link to="/casaments" className="cta-button">
-            casaments
-          </Link>
+          <a href="https://hcsbhandbol.com/horari-platja/" target="_blank" rel="noreferrer" className="cta-button cta-button--dark">
+            {t.cta2}
+          </a>
         </div>
       </section>
 
-      {/* ═══ SECTION 4 — Footer / Contact (video bg) ═══ */}
+      {/* ═══ SECTION 4 — Footer / Contact ═══ */}
       <section className="snap-section footer-section">
-        <div className="footer-bg-image" />
+        <div className="footer-bg-image" style={{ backgroundImage: `url(${Photo1})` }} />
         <div className="overlay overlay--heavy" />
 
         <div className="footer-content anim-in">
-          <img src={LOGO_WHITE} alt="Sensacions" className="footer-logo" />
+          <img src={LogoBB} alt="Bay Bandits" className="footer-logo" />
 
           <div className="footer-columns">
             {/* Col 1 — Contacte */}
             <div className="footer-col">
-              <a href="mailto:events@sensacions.barcelona">events@sensacions.barcelona</a>
-              <a href="tel:+34931874342">+34 931 874 342</a>
-              <p>Av. Can Magí, 5<br/>08173 Sant Cugat del Vallès<br/>(Barcelona)</p>
+              <h4>{t.contact}</h4>
+              <a href="mailto:hcsbhandbol@gmail.com">hcsbhandbol@gmail.com</a>
+              <a href="tel:+34661342473">+34 661 34 24 73</a>
+              <p>C/ de Lluís Companys, 23<br/>08830 Sant Boi de Llobregat<br/>(Barcelona)</p>
             </div>
 
-            {/* Col 2 — Navegació */}
+            {/* Col 2 — Info */}
             <div className="footer-col footer-col--nav">
-              <Link to="/corporatiu">Corporatiu</Link>
-              <Link to="/casaments">Casaments</Link>
-              <a href="#gastronomia" onClick={(e) => e.preventDefault()}>Gastronomia</a>
-              <a href="#equip" onClick={(e) => e.preventDefault()}>Equip</a>
-              <a href="#sostenibilitat" onClick={(e) => e.preventDefault()}>Sostenibilitat</a>
-              <a href="#blog" onClick={(e) => e.preventDefault()}>Blog</a>
-              <a href="#contacte" onClick={(e) => e.preventDefault()}>Contacte</a>
+              <a href="https://hcsbhandbol.com/historia/" target="_blank" rel="noreferrer">{t.club}</a>
+              <a href="https://hcsbhandbol.com/horari-platja/" target="_blank" rel="noreferrer">{t.horaris}</a>
+              <a href="https://hcsbhandbol.com/inscripciones/" target="_blank" rel="noreferrer">{t.inscripcions}</a>
             </div>
 
-            {/* Col 3 — Com arribar */}
+            {/* Col 3 — La secció */}
             <div className="footer-col">
-              <h4>COM ARRIBAR</h4>
-              <p>Bus: L1 Sant Cugat, L8 Sant Cugat, PR A4 Barcelona</p>
-              <p>Tren: Ferrocarrils catalans S1 i S2, Rodalies R8</p>
+              <h4>BAY BANDITS</h4>
+              <p>{t.seccio}</p>
+              <p>{t.stats}</p>
             </div>
           </div>
 
           {/* Social */}
           <div className="footer-social">
-            <a href="https://www.facebook.com/sensacionsbarcelona/" target="_blank" rel="noreferrer" aria-label="Facebook">
-              <svg viewBox="0 0 320 512" fill="currentColor" width="18" height="18"><path d="M80 299.3V512h116V299.3h86.5l12-95.8H196V135.7c0-26.2 7.2-44 44.8-44H300V6.3C294.5 5.5 264.7 3 229.8 3 157 3 108 47 108 133.3v70.2H20v95.8h88z"/></svg>
-            </a>
-            <a href="https://www.instagram.com/sensacionsbarcelona/" target="_blank" rel="noreferrer" aria-label="Instagram">
+            <a href="https://www.instagram.com/baybanditsbh" target="_blank" rel="noreferrer" aria-label="Instagram">
               <svg viewBox="0 0 448 512" fill="currentColor" width="18" height="18"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9S160.5 370.8 224.1 370.8 339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8 0-14.9 12-26.8 26.8-26.8 14.9 0 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1S4.2 127.9 2.4 163.8c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
             </a>
-            <a href="https://www.linkedin.com/company/sensacionsbarcelona/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
-              <svg viewBox="0 0 448 512" fill="currentColor" width="18" height="18"><path d="M100.3 448H7.4V148.9h92.9zM53.8 108.1C24.1 108.1 0 83.5 0 53.8S24.1 0 53.8 0s53.8 24.1 53.8 53.8-24.1 54.3-53.8 54.3zM447.9 448h-92.7V302.4c0-34.7-.7-79.2-48.3-79.2-48.3 0-55.7 37.7-55.7 76.7V448h-92.8V148.9h89.1v40.8h1.3c12.4-23.5 42.7-48.3 87.9-48.3 94 0 111.3 61.9 111.3 142.3V448z"/></svg>
+            <a href="https://twitter.com/hcsantboi" target="_blank" rel="noreferrer" aria-label="Twitter / X">
+              <svg viewBox="0 0 512 512" fill="currentColor" width="18" height="18"><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8l164.9-188.5L26.8 48H172.4l102.5 135.5zm-24.8 373.8h39.1L151.1 88h-42z"/></svg>
+            </a>
+            <a href="mailto:hcsbhandbol@gmail.com" aria-label="Email">
+              <svg viewBox="0 0 512 512" fill="currentColor" width="18" height="18"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4l217.6 163.2c11.4 8.5 27 8.5 38.4 0l217.6-163.2C504.9 141.3 512 127.1 512 112c0-26.5-21.5-48-48-48H48zm-6.4 254.4C14.7 297.5 0 278 0 256V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V256c0-22-14.7-41.5-36.6-46.6L256 372.8 54.4 318.4z"/></svg>
             </a>
           </div>
 
           {/* Legal */}
           <div className="footer-legal">
-            <a href="#cookies" onClick={(e) => e.preventDefault()}>Política de cookies</a>
-            <a href="#avis-legal" onClick={(e) => e.preventDefault()}>Avís legal</a>
-            <a href="#privacitat" onClick={(e) => e.preventDefault()}>Política de privacitat</a>
-            <a href="#denuncies" onClick={(e) => e.preventDefault()}>Canal de denúncies</a>
-            <a href="#qualitat" onClick={(e) => e.preventDefault()}>Política de qualitat</a>
+            <span>{t.legal}</span>
+            <a href="https://hcsbhandbol.com/politica-de-privacitat/" target="_blank" rel="noreferrer">{t.privacy}</a>
           </div>
         </div>
       </section>
