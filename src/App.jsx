@@ -10,7 +10,6 @@ import Photo7  from './assets/photos/Photo7.jpeg'
 import LogoBB  from './assets/logos/baybandits.png'
 
 /* ── Home video sources ── */
-const VIDEO_WEBM = `${import.meta.env.BASE_URL}videos/bandits-wb.webm`
 const VIDEO_MP4  = `${import.meta.env.BASE_URL}videos/bandits-wb.mp4`
 
 const sponsorLogos = Object.entries(
@@ -122,8 +121,7 @@ function App() {
       {/* ═══ SECTION 1 — Hero: Logo + Video + Mute ═══ */}
       <section className="snap-section hero-section">
         <div className="video-bg">
-          <video ref={videoRef} className="bg-vid" autoPlay loop muted playsInline preload="auto">
-            <source src={VIDEO_WEBM} type="video/webm" />
+          <video ref={videoRef} className="bg-vid" autoPlay loop muted playsInline preload="auto" poster={`${import.meta.env.BASE_URL}videos/poster.jpg`}>
             <source src={VIDEO_MP4}  type="video/mp4" />
           </video>
         </div>
