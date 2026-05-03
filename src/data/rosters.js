@@ -15,7 +15,7 @@ export const rosters = [
       { dorsal: 10, name: 'Sara' },
       { dorsal: 21, name: 'Irene' },
       { dorsal: 22, name: 'Llum' },
-      { dorsal: 23, name: 'Graninii' },
+      { dorsal: 23, name: 'Granados' },
       { dorsal: 25, name: 'Toledo' },
       { dorsal: 26, name: 'Allegue' },
       { dorsal: 33, name: 'A. Rotllan' },
