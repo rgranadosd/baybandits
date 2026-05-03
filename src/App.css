@@ -161,34 +161,6 @@
   transform: scale(1.04);
 }
 
-/* Mute toggle */
-.mute-toggle {
-  position: absolute;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 5;
-  background: linear-gradient(90deg, rgba(255, 78, 163, 0.18), rgba(42, 168, 255, 0.18));
-  border: 1px solid rgba(42, 168, 255, 0.55);
-  border-radius: 50%;
-  width: 52px;
-  height: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--bb-text);
-  cursor: pointer;
-  transition: background 0.2s, transform 0.2s, border-color 0.2s;
-  backdrop-filter: blur(8px);
-}
-
-.mute-toggle:hover {
-  background: linear-gradient(90deg, var(--bb-pink), var(--bb-blue));
-  border-color: rgba(255, 78, 163, 0.9);
-  color: #060a15;
-  transform: translateX(-50%) scale(1.08);
-}
-
 /* ═══ SECTIONS 2 & 3 — CTA with GRAYSCALE bg ═══ */
 .cta-section {
   overflow: hidden;

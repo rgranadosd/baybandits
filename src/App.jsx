@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import './App.css'
 
@@ -62,34 +62,18 @@ const i18n = {
   },
 }
 
-/* ── SVG icons ── */
-const VolumeOff = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor" width="22" height="22">
-    <path d="M301.1 34.8C312.6 40 320 51.4 320 64v384c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352H64c-35.3 0-64-28.7-64-64v-64c0-35.3 28.7-64 64-64h67.8L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3zM425 167l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0z"/>
-  </svg>
-)
-const VolumeOn = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" fill="currentColor" width="22" height="22">
-    <path d="M301.1 34.8C312.6 40 320 51.4 320 64v384c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352H64c-35.3 0-64-28.7-64-64v-64c0-35.3 28.7-64 64-64h67.8L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3zM412.6 181.5C425.9 196.6 434 215.2 434 256s-8.1 59.4-21.4 74.5c-8.5 9.7-23.7 10.7-33.4 2.2s-10.7-23.7-2.2-33.4c6.1-6.9 9-16.4 9-43.3s-2.9-36.4-9-43.3c-8.5-9.7-7.5-24.9 2.2-33.4s24.9-7.5 33.4 2.2zm69.9-50.2c43.2 35.2 70.9 88.9 70.9 149s-27.7 113.8-70.9 149c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8c31.6-25.8 53.3-65.3 53.3-111.7s-21.7-85.9-53.3-111.7c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zm86.8-79.7C623.5 93.8 640 165.8 640 256s-16.5 162.2-69.6 204.5c-10.3 8.2-25.4 6.5-33.6-3.8s-6.5-25.4 3.8-33.6C584.4 387.4 592 324.2 592 256s-7.6-131.4-51.4-167.1c-10.3-8.2-11.9-23.3-3.8-33.6s23.3-11.9 33.6-3.8z"/>
-  </svg>
-)
-
 function App() {
   const videoRef = useRef(null)
   const pageRef         = useRef(null)
-  const [muted, setMuted]       = useState(true)
   const [lang, setLang]         = useState('es')
   const t = i18n[lang]
 
-  /* ── Video mute / play ── */
+  /* ── Video play ── */
   useEffect(() => {
     const vid = videoRef.current
     if (!vid) return
-    vid.muted = muted
     vid.play().catch(() => {})
-  }, [muted])
-
-  const toggleMute = useCallback(() => setMuted(m => !m), [])
+  }, [])
 
   /* ── Intersection Observer – fade-in on scroll ── */
   useEffect(() => {
@@ -129,9 +113,6 @@ function App() {
         <div className="hero-center anim-in">
           <img src={LogoBB} alt="baybandits" className="logo-intro__mark" />
         </div>
-        <button className="mute-toggle" onClick={toggleMute} aria-label={muted ? 'Activar so' : 'Silenciar'}>
-          {muted ? <VolumeOff /> : <VolumeOn />}
-        </button>
       </section>
 
       {/* ═══ SECTION 2 — CTA Equips (grayscale + dark overlay) ═══ */}
