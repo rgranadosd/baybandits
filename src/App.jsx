@@ -105,7 +105,7 @@ function App() {
       {/* ═══ SECTION 1 — Hero: Logo + Video + Mute ═══ */}
       <section className="snap-section hero-section">
         <div className="video-bg">
-          <video ref={videoRef} className="bg-vid" autoPlay loop muted playsInline preload="auto" poster={`${import.meta.env.BASE_URL}videos/poster.jpg`}>
+          <video ref={videoRef} className="bg-vid" autoPlay loop muted playsInline preload="auto">
             <source src={VIDEO_MP4}  type="video/mp4" />
           </video>
         </div>
