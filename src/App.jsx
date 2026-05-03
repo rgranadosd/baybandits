@@ -11,6 +11,7 @@ import LogoBB  from './assets/logos/baybandits.png'
 
 /* ── Home video sources ── */
 const VIDEO_MP4  = `${import.meta.env.BASE_URL}videos/bandits-wb.mp4`
+const HERO_VIDEO_MP4 = `${VIDEO_MP4}#t=0.001`
 
 const sponsorLogos = Object.entries(
   import.meta.glob('./assets/partners/*.{png,jpg,jpeg,svg,PNG,JPG,JPEG,SVG}', {
@@ -86,6 +87,15 @@ function App() {
       if (playPromise?.catch) playPromise.catch(() => {})
     }
 
+    const primeFrame = () => {
+      if (vid.currentTime > 0) return
+      try {
+        vid.currentTime = 0.001
+      } catch {
+        // Safari iOS may reject early seeks until metadata is available.
+      }
+    }
+
     const unlockPlayback = () => {
       tryPlay()
       document.removeEventListener('touchstart', unlockPlayback)
@@ -102,8 +112,10 @@ function App() {
     }
 
     vid.addEventListener('canplay', tryPlay)
+    vid.addEventListener('loadedmetadata', primeFrame)
     vid.addEventListener('loadedmetadata', tryPlay)
     vid.addEventListener('loadeddata', tryPlay)
+    vid.addEventListener('seeked', tryPlay)
     vid.addEventListener('suspend', tryPlay)
     document.addEventListener('visibilitychange', handleVisibility)
     window.addEventListener('pageshow', tryPlay)
@@ -125,8 +137,10 @@ function App() {
     if (vid.readyState >= 4) setVideoPct(100)
     return () => {
       vid.removeEventListener('canplay', tryPlay)
+      vid.removeEventListener('loadedmetadata', primeFrame)
       vid.removeEventListener('loadedmetadata', tryPlay)
       vid.removeEventListener('loadeddata', tryPlay)
+      vid.removeEventListener('seeked', tryPlay)
       vid.removeEventListener('suspend', tryPlay)
       vid.removeEventListener('progress', updateProgress)
       vid.removeEventListener('canplaythrough', handleCanPlayThrough)
@@ -169,7 +183,7 @@ function App() {
       <section className="snap-section hero-section">
         <div className="video-bg">
           <video ref={videoRef} className="bg-vid" autoPlay loop muted playsInline preload="auto" disablePictureInPicture>
-            <source src={VIDEO_MP4}  type="video/mp4" />
+            <source src={HERO_VIDEO_MP4}  type="video/mp4" />
           </video>
         </div>
         <div className="overlay overlay--light" />
