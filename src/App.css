@@ -240,46 +240,61 @@
   justify-content: center;
 }
 
-/* Default button: gradient corporate (for dark sections) */
+/* Default button: corporate ink core + gradient edge */
 .cta-button {
   display: inline-block;
   padding: 16px 40px;
   font-family: 'Montserrat', sans-serif;
   font-size: 16px;
-  font-weight: 200;
+  font-weight: 600;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   text-decoration: none;
   line-height: 1.2em;
-  color: var(--bb-ink);
-  background: linear-gradient(90deg, var(--bb-pink), var(--bb-blue));
-  border: 1px solid rgba(42, 168, 255, 0.6);
+  color: var(--bb-text);
+  background:
+    linear-gradient(180deg, rgba(11, 16, 32, 0.95), rgba(11, 16, 32, 0.9)) padding-box,
+    linear-gradient(120deg, var(--bb-pink), var(--bb-blue)) border-box;
+  border: 2px solid transparent;
   border-radius: 80px;
   cursor: pointer;
-  transition: transform 0.4s cubic-bezier(0.39, 0.575, 0.565, 1), box-shadow 0.3s ease, filter 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.28s ease, box-shadow 0.28s ease, filter 0.28s ease, color 0.28s ease;
   opacity: 0;
   transform: scale(0.6);
-  box-shadow: 0 0 24px rgba(255, 78, 163, 0.32);
+  box-shadow: 0 10px 24px rgba(6, 9, 20, 0.45), 0 0 22px rgba(255, 78, 163, 0.26);
+}
+
+.cta-button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(115deg, rgba(255, 78, 163, 0.16), rgba(42, 168, 255, 0.16));
+  opacity: 0.75;
+  pointer-events: none;
 }
 
 .cta-button:hover {
-  transform: scale(0.92);
-  box-shadow: 0 0 32px rgba(42, 168, 255, 0.48);
-  filter: brightness(1.12);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 12px 28px rgba(6, 9, 20, 0.52), 0 0 26px rgba(42, 168, 255, 0.4);
+  filter: brightness(1.08);
 }
 
-/* Dark button variant: gradient corporate for light sections (more visible) */
+/* Light-surface variant: glass core + gradient edge */
 .cta-button--dark {
-  color: var(--bb-text);
-  background: linear-gradient(90deg, var(--bb-pink), var(--bb-blue));
-  border: 2px solid rgba(255, 78, 163, 0.9);
-  box-shadow: 0 0 32px rgba(255, 78, 163, 0.48);
+  color: var(--bb-ink);
+  background:
+    linear-gradient(180deg, rgba(246, 248, 255, 0.95), rgba(246, 248, 255, 0.9)) padding-box,
+    linear-gradient(120deg, var(--bb-blue), var(--bb-pink)) border-box;
+  border: 2px solid transparent;
+  box-shadow: 0 10px 22px rgba(6, 9, 20, 0.3), 0 0 18px rgba(42, 168, 255, 0.26);
 }
 
 .cta-button--dark:hover {
-  border-color: rgba(255, 78, 163, 1);
-  box-shadow: 0 0 48px rgba(42, 168, 255, 0.64);
-  filter: brightness(1.08);
+  box-shadow: 0 12px 26px rgba(6, 9, 20, 0.35), 0 0 24px rgba(255, 78, 163, 0.3);
+  filter: brightness(1.03);
 }
 
 .cta-content.anim-in.visible .cta-button {
