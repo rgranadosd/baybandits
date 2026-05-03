@@ -123,14 +123,6 @@
   object-fit: cover;
 }
 
-.bg-vid--mob  { display: none; }
-.bg-vid--desk { display: block; }
-
-@media (max-width: 767px) {
-  .bg-vid--desk { display: none; }
-  .bg-vid--mob  { display: block; }
-}
-
 /* ═══ SECTION 1 — Hero ═══ */
 .hero-section {
   z-index: 2;

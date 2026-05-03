@@ -76,30 +76,19 @@ const VolumeOn = () => (
 )
 
 function App() {
-  const videoDesktopRef = useRef(null)
-  const videoMobileRef  = useRef(null)
+  const videoRef = useRef(null)
   const pageRef         = useRef(null)
   const [muted, setMuted]       = useState(true)
-  const [isMobile, setIsMobile] = useState(false)
   const [lang, setLang]         = useState('es')
   const t = i18n[lang]
 
-  /* ── Mobile detect ── */
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)')
-    const update = () => setIsMobile(mq.matches)
-    update()
-    mq.addEventListener('change', update)
-    return () => mq.removeEventListener('change', update)
-  }, [])
-
   /* ── Video mute / play ── */
   useEffect(() => {
-    const vid = isMobile ? videoMobileRef.current : videoDesktopRef.current
+    const vid = videoRef.current
     if (!vid) return
     vid.muted = muted
     vid.play().catch(() => {})
-  }, [muted, isMobile])
+  }, [muted])
 
   const toggleMute = useCallback(() => setMuted(m => !m), [])
 
@@ -133,11 +122,7 @@ function App() {
       {/* ═══ SECTION 1 — Hero: Logo + Video + Mute ═══ */}
       <section className="snap-section hero-section">
         <div className="video-bg">
-          <video ref={videoDesktopRef} className="bg-vid bg-vid--desk" autoPlay loop muted playsInline preload="auto">
-            <source src={VIDEO_WEBM} type="video/webm" />
-            <source src={VIDEO_MP4}  type="video/mp4" />
-          </video>
-          <video ref={videoMobileRef}  className="bg-vid bg-vid--mob" autoPlay loop muted playsInline preload="auto">
+          <video ref={videoRef} className="bg-vid" autoPlay loop muted playsInline preload="auto">
             <source src={VIDEO_WEBM} type="video/webm" />
             <source src={VIDEO_MP4}  type="video/mp4" />
           </video>

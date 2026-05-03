@@ -342,6 +342,10 @@
     padding: 22px 14px 42px;
   }
 
+  .teams-logo {
+    width: clamp(100px, 28vw, 140px);
+  }
+
   .teams-index {
     top: 8px;
     margin-bottom: 16px;
@@ -375,5 +379,16 @@
   .team-card {
     min-height: 0;
   }
+}
 
+@media (max-width: 380px) {
+  .team-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .teams-index__item {
+    font-size: 9px;
+    padding: 6px 8px;
+  }
 }
