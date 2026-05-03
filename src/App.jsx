@@ -86,6 +86,13 @@ function App() {
       if (playPromise?.catch) playPromise.catch(() => {})
     }
 
+    const unlockPlayback = () => {
+      tryPlay()
+      document.removeEventListener('touchstart', unlockPlayback)
+      document.removeEventListener('pointerdown', unlockPlayback)
+      document.removeEventListener('scroll', unlockPlayback)
+    }
+
     vid.load()
     tryPlay()
 
@@ -100,6 +107,9 @@ function App() {
     vid.addEventListener('suspend', tryPlay)
     document.addEventListener('visibilitychange', handleVisibility)
     window.addEventListener('pageshow', tryPlay)
+    document.addEventListener('touchstart', unlockPlayback, { passive: true })
+    document.addEventListener('pointerdown', unlockPlayback, { passive: true })
+    document.addEventListener('scroll', unlockPlayback, { passive: true })
 
     const updateProgress = () => {
       if (!vid.duration) return
@@ -122,6 +132,9 @@ function App() {
       vid.removeEventListener('canplaythrough', handleCanPlayThrough)
       document.removeEventListener('visibilitychange', handleVisibility)
       window.removeEventListener('pageshow', tryPlay)
+      document.removeEventListener('touchstart', unlockPlayback)
+      document.removeEventListener('pointerdown', unlockPlayback)
+      document.removeEventListener('scroll', unlockPlayback)
     }
   }, [])
 
