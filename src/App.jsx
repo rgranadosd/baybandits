@@ -7,34 +7,34 @@ import Photo10 from './assets/photos/Photo10.jpeg'
 import Photo11 from './assets/photos/Photo11.jpeg'
 import LogoBB  from './assets/logos/ESCUDO BAY BANDITS 2026.PNG'
 
-/* ── Sensacions original video ── */
-const DESKTOP_VIDEO = 'https://sensacions.com/wp-content/uploads/2024/09/SENSACIONS_LANDING_V3.webm'
-const MOBILE_VIDEO  = 'https://sensacions.com/wp-content/uploads/2024/04/SENSACIONS_LANDING_VERT_V31.mp4'
+/* ── Home video sources ── */
+const VIDEO_WEBM = '/videos/bandits-wb.webm'
+const VIDEO_MP4  = '/videos/bandits-wb.mp4'
 
 /* ── Traduccions ── */
 const i18n = {
   es: {
-    cta1: 'únete a los bandits',
-    cta2: 'calendario 2025',
+    cta1: 'nuestros equipos',
+    cta2: 'calendario 2026',
     contact: 'CONTACTO',
     club: 'El Club',
     horaris: 'Horarios Playa',
     inscripcions: 'Inscripciones',
     seccio: 'Sección de balonmano playa del Handbol Cooperativa Sant Boi.',
     stats: '7 equipos · 100+ jugadores · Est. 2023',
-    legal: '© 2025 Bay Bandits · Handbol Cooperativa Sant Boi',
+    legal: '© 2026 Bay Bandits · Handbol Cooperativa Sant Boi',
     privacy: 'Política de privacidad',
   },
   ca: {
-    cta1: 'uneix-te als bandits',
-    cta2: 'calendari 2025',
+    cta1: 'els nostres equips',
+    cta2: 'calendari 2026',
     contact: 'CONTACTE',
     club: 'El Club',
     horaris: 'Horaris Platja',
     inscripcions: 'Inscripcions',
     seccio: "Secció d'handbol platja de l'Handbol Cooperativa Sant Boi.",
     stats: '7 equips · 100+ jugadors · Est. 2023',
-    legal: '© 2025 Bay Bandits · Handbol Cooperativa Sant Boi',
+    legal: '© 2026 Bay Bandits · Handbol Cooperativa Sant Boi',
     privacy: 'Política de privacitat',
   },
 }
@@ -109,8 +109,14 @@ function App() {
       {/* ═══ SECTION 1 — Hero: Logo + Video + Mute ═══ */}
       <section className="snap-section hero-section">
         <div className="video-bg">
-          <video ref={videoDesktopRef} className="bg-vid bg-vid--desk" src={DESKTOP_VIDEO} autoPlay loop muted playsInline />
-          <video ref={videoMobileRef}  className="bg-vid bg-vid--mob"  src={MOBILE_VIDEO}  autoPlay loop muted playsInline />
+          <video ref={videoDesktopRef} className="bg-vid bg-vid--desk" autoPlay loop muted playsInline>
+            <source src={VIDEO_WEBM} type="video/webm" />
+            <source src={VIDEO_MP4}  type="video/mp4" />
+          </video>
+          <video ref={videoMobileRef}  className="bg-vid bg-vid--mob" autoPlay loop muted playsInline>
+            <source src={VIDEO_WEBM} type="video/webm" />
+            <source src={VIDEO_MP4}  type="video/mp4" />
+          </video>
         </div>
         <div className="overlay overlay--light" />
         <div className="hero-center anim-in">
