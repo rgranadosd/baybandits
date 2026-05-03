@@ -66,13 +66,38 @@ function App() {
   const videoRef = useRef(null)
   const pageRef         = useRef(null)
   const [lang, setLang]         = useState('es')
+  const [videoPct, setVideoPct] = useState(0)
   const t = i18n[lang]
 
-  /* ── Video play ── */
+  /* ── Video play + loading progress ── */
   useEffect(() => {
     const vid = videoRef.current
     if (!vid) return
-    vid.play().catch(() => {})
+
+    const tryPlay = () => { vid.play().catch(() => {}) }
+
+    // Intento inmediato; en móvil puede fallar si el vídeo no está listo aún
+    tryPlay()
+
+    // Reintento cuando el navegador confirma que puede reproducir (crítico en iOS)
+    vid.addEventListener('canplay', tryPlay)
+
+    const updateProgress = () => {
+      if (!vid.duration) return
+      let loaded = 0
+      for (let i = 0; i < vid.buffered.length; i++) {
+        loaded = Math.max(loaded, vid.buffered.end(i))
+      }
+      setVideoPct(Math.min(100, Math.round((loaded / vid.duration) * 100)))
+    }
+
+    vid.addEventListener('progress', updateProgress)
+    vid.addEventListener('canplaythrough', () => setVideoPct(100))
+    if (vid.readyState >= 4) setVideoPct(100)
+    return () => {
+      vid.removeEventListener('canplay', tryPlay)
+      vid.removeEventListener('progress', updateProgress)
+    }
   }, [])
 
   /* ── Intersection Observer – fade-in on scroll ── */
@@ -112,6 +137,11 @@ function App() {
         <div className="overlay overlay--light" />
         <div className="hero-center anim-in">
           <img src={LogoBB} alt="baybandits" className="logo-intro__mark" />
+          {videoPct < 100 && (
+            <div className="vid-progress" role="progressbar" aria-valuenow={videoPct} aria-valuemin={0} aria-valuemax={100}>
+              <div className="vid-progress__bar" style={{ width: `${videoPct}%` }} />
+            </div>
+          )}
         </div>
       </section>
 
