@@ -133,11 +133,11 @@ function App() {
       {/* ═══ SECTION 1 — Hero: Logo + Video + Mute ═══ */}
       <section className="snap-section hero-section">
         <div className="video-bg">
-          <video ref={videoDesktopRef} className="bg-vid bg-vid--desk" autoPlay loop muted playsInline>
+          <video ref={videoDesktopRef} className="bg-vid bg-vid--desk" autoPlay loop muted playsInline preload="auto">
             <source src={VIDEO_WEBM} type="video/webm" />
             <source src={VIDEO_MP4}  type="video/mp4" />
           </video>
-          <video ref={videoMobileRef}  className="bg-vid bg-vid--mob" autoPlay loop muted playsInline>
+          <video ref={videoMobileRef}  className="bg-vid bg-vid--mob" autoPlay loop muted playsInline preload="auto">
             <source src={VIDEO_WEBM} type="video/webm" />
             <source src={VIDEO_MP4}  type="video/mp4" />
           </video>
