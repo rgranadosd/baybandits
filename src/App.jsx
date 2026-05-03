@@ -10,8 +10,8 @@ import Photo7  from './assets/photos/Photo7.jpeg'
 import LogoBB  from './assets/logos/baybandits.png'
 
 /* ── Home video sources ── */
-const VIDEO_WEBM = '/videos/bandits-wb.webm'
-const VIDEO_MP4  = '/videos/bandits-wb.mp4'
+const VIDEO_WEBM = `${import.meta.env.BASE_URL}videos/bandits-wb.webm`
+const VIDEO_MP4  = `${import.meta.env.BASE_URL}videos/bandits-wb.mp4`
 
 const sponsorLogos = Object.entries(
   import.meta.glob('./assets/partners/*.{png,jpg,jpeg,svg,PNG,JPG,JPEG,SVG}', {
