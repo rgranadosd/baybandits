@@ -74,13 +74,32 @@ function App() {
     const vid = videoRef.current
     if (!vid) return
 
-    const tryPlay = () => { vid.play().catch(() => {}) }
+    vid.muted = true
+    vid.defaultMuted = true
+    vid.playsInline = true
+    vid.setAttribute('muted', '')
+    vid.setAttribute('playsinline', '')
+    vid.setAttribute('webkit-playsinline', 'true')
 
-    // Intento inmediato; en móvil puede fallar si el vídeo no está listo aún
+    const tryPlay = () => {
+      const playPromise = vid.play()
+      if (playPromise?.catch) playPromise.catch(() => {})
+    }
+
+    vid.load()
     tryPlay()
 
-    // Reintento cuando el navegador confirma que puede reproducir (crítico en iOS)
+    const handleCanPlayThrough = () => setVideoPct(100)
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') tryPlay()
+    }
+
     vid.addEventListener('canplay', tryPlay)
+    vid.addEventListener('loadedmetadata', tryPlay)
+    vid.addEventListener('loadeddata', tryPlay)
+    vid.addEventListener('suspend', tryPlay)
+    document.addEventListener('visibilitychange', handleVisibility)
+    window.addEventListener('pageshow', tryPlay)
 
     const updateProgress = () => {
       if (!vid.duration) return
@@ -92,11 +111,17 @@ function App() {
     }
 
     vid.addEventListener('progress', updateProgress)
-    vid.addEventListener('canplaythrough', () => setVideoPct(100))
+    vid.addEventListener('canplaythrough', handleCanPlayThrough)
     if (vid.readyState >= 4) setVideoPct(100)
     return () => {
       vid.removeEventListener('canplay', tryPlay)
+      vid.removeEventListener('loadedmetadata', tryPlay)
+      vid.removeEventListener('loadeddata', tryPlay)
+      vid.removeEventListener('suspend', tryPlay)
       vid.removeEventListener('progress', updateProgress)
+      vid.removeEventListener('canplaythrough', handleCanPlayThrough)
+      document.removeEventListener('visibilitychange', handleVisibility)
+      window.removeEventListener('pageshow', tryPlay)
     }
   }, [])
 
@@ -130,7 +155,7 @@ function App() {
       {/* ═══ SECTION 1 — Hero: Logo + Video + Mute ═══ */}
       <section className="snap-section hero-section">
         <div className="video-bg">
-          <video ref={videoRef} className="bg-vid" autoPlay loop muted playsInline preload="auto">
+          <video ref={videoRef} className="bg-vid" autoPlay loop muted playsInline preload="auto" disablePictureInPicture>
             <source src={VIDEO_MP4}  type="video/mp4" />
           </video>
         </div>
