@@ -1,17 +1,35 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
+import { Link } from 'react-router-dom'
 import './App.css'
 
 /* ── Assets — fotos ── */
 import Photo1  from './assets/photos/Photo1.jpeg'
 import Photo10 from './assets/photos/Photo10.jpeg'
 import Photo11 from './assets/photos/Photo11.jpeg'
-import LogoBB  from './assets/logos/ESCUDO BAY BANDITS 2026.PNG'
+import Photo7  from './assets/photos/Photo7.jpeg'
+import LogoBB  from './assets/logos/baybandits.png'
 
 /* ── Home video sources ── */
 const VIDEO_WEBM = '/videos/bandits-wb.webm'
 const VIDEO_MP4  = '/videos/bandits-wb.mp4'
 
+const sponsorLogos = Object.entries(
+  import.meta.glob('./assets/partners/*.{png,jpg,jpeg,svg,PNG,JPG,JPEG,SVG}', {
+    eager: true,
+    import: 'default',
+  })
+)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([path, src]) => {
+    const fileName = path.split('/').pop()?.replace(/\.[^/.]+$/, '') || 'Patrocinador'
+    return {
+      src,
+      alt: fileName.replace(/[_-]+/g, ' ').trim(),
+    }
+  })
+
 /* ── Traduccions ── */
+
 const i18n = {
   es: {
     cta1: 'nuestros equipos',
@@ -22,7 +40,10 @@ const i18n = {
     inscripcions: 'Inscripciones',
     seccio: 'Sección de balonmano playa del Handbol Cooperativa Sant Boi.',
     stats: '7 equipos · 100+ jugadores · Est. 2023',
-    legal: '© 2026 Bay Bandits · Handbol Cooperativa Sant Boi',
+    sponsorsKicker: 'Partners oficiales',
+    sponsors: 'Patrocinadores',
+    sponsorsLead: 'Marcas que apoyan nuestro proyecto deportivo.',
+    legal: '© 2026 baybandits · Handbol Cooperativa Sant Boi',
     privacy: 'Política de privacidad',
   },
   ca: {
@@ -34,7 +55,10 @@ const i18n = {
     inscripcions: 'Inscripcions',
     seccio: "Secció d'handbol platja de l'Handbol Cooperativa Sant Boi.",
     stats: '7 equips · 100+ jugadors · Est. 2023',
-    legal: '© 2026 Bay Bandits · Handbol Cooperativa Sant Boi',
+    sponsorsKicker: 'Partners oficials',
+    sponsors: 'Patrocinadors',
+    sponsorsLead: 'Marques que donen suport al nostre projecte esportiu.',
+    legal: '© 2026 baybandits · Handbol Cooperativa Sant Boi',
     privacy: 'Política de privacitat',
   },
 }
@@ -94,7 +118,7 @@ function App() {
     <div className="page" ref={pageRef}>
       <div className="page-transition" />
 
-      {/* ── Language switcher (top-right, like sensacions) ── */}
+      {/* ── Language switcher (top-right) ── */}
       <nav className="lang-nav" aria-label="Idioma">
         <button
           className={lang === 'es' ? 'lang-active' : ''}
@@ -120,7 +144,7 @@ function App() {
         </div>
         <div className="overlay overlay--light" />
         <div className="hero-center anim-in">
-          <img src={LogoBB} alt="Bay Bandits" className="logo-intro__mark" />
+          <img src={LogoBB} alt="baybandits" className="logo-intro__mark" />
         </div>
         <button className="mute-toggle" onClick={toggleMute} aria-label={muted ? 'Activar so' : 'Silenciar'}>
           {muted ? <VolumeOff /> : <VolumeOn />}
@@ -132,9 +156,9 @@ function App() {
         <div className="cta-bg" style={{ backgroundImage: `url(${Photo11})` }} />
         <div className="overlay overlay--dark" />
         <div className="cta-content anim-in">
-          <a href="https://hcsbhandbol.com/inscripciones/" target="_blank" rel="noreferrer" className="cta-button">
+          <Link to="/equipos" className="cta-button">
             {t.cta1}
-          </a>
+          </Link>
         </div>
       </section>
 
@@ -149,13 +173,31 @@ function App() {
         </div>
       </section>
 
-      {/* ═══ SECTION 4 — Footer / Contact ═══ */}
+      {/* ═══ SECTION 4 — Sponsors ═══ */}
+      <section className="snap-section sponsors-section">
+        <div className="cta-bg" style={{ backgroundImage: `url(${Photo7})` }} />
+        <div className="overlay overlay--dark" />
+        <div className="sponsors-wrap anim-in">
+          <p className="sponsors-kicker">{t.sponsorsKicker}</p>
+          <h3 className="sponsors-title">{t.sponsors}</h3>
+          <p className="sponsors-lead">{t.sponsorsLead}</p>
+          <div className="sponsors-grid" aria-label={t.sponsors}>
+            {sponsorLogos.map((logo) => (
+              <article className="sponsor-card" key={logo.src}>
+                <img src={logo.src} alt={logo.alt} loading="lazy" />
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ SECTION 5 — Footer / Contact ═══ */}
       <section className="snap-section footer-section">
         <div className="footer-bg-image" style={{ backgroundImage: `url(${Photo1})` }} />
         <div className="overlay overlay--heavy" />
 
         <div className="footer-content anim-in">
-          <img src={LogoBB} alt="Bay Bandits" className="footer-logo" />
+          <img src={LogoBB} alt="baybandits" className="footer-logo" />
 
           <div className="footer-columns">
             {/* Col 1 — Contacte */}
@@ -175,7 +217,7 @@ function App() {
 
             {/* Col 3 — La secció */}
             <div className="footer-col">
-              <h4>BAY BANDITS</h4>
+              <h4>baybandits</h4>
               <p>{t.seccio}</p>
               <p>{t.stats}</p>
             </div>
