@@ -212,7 +212,7 @@
 }
 
 .team-card {
-  min-height: 232px;
+  min-height: 214px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -231,63 +231,41 @@
 .team-jersey {
   position: relative;
   width: 100%;
-  min-height: 220px;
-  padding: 20px 16px 18px;
+  min-height: 202px;
+  padding: 34px 16px 18px;
   display: grid;
   align-content: start;
   justify-items: center;
-  gap: 10px;
+  gap: 8px;
   color: #11151f;
-  border-radius: 26px 26px 18px 18px;
-  background:
-    linear-gradient(132deg, rgba(255, 255, 255, 0.9) 0 2px, transparent 2px 8px, rgba(255, 255, 255, 0.32) 8px 10px, transparent 10px 16px),
-    linear-gradient(48deg, rgba(255, 255, 255, 0.86) 0 2px, transparent 2px 8px, rgba(255, 255, 255, 0.24) 8px 10px, transparent 10px 16px),
-    linear-gradient(180deg, color-mix(in srgb, var(--team-accent) 88%, white 12%), var(--team-accent));
-  clip-path: polygon(20% 0%, 38% 0%, 43% 6%, 57% 6%, 62% 0%, 80% 0%, 92% 15%, 92% 100%, 8% 100%, 8% 15%);
+  border: 2px solid rgba(16, 22, 37, 0.82);
+  border-radius: 18px;
+  background: var(--team-accent);
+  clip-path: polygon(18% 0%, 34% 0%, 40% 8%, 60% 8%, 66% 0%, 82% 0%, 100% 18%, 100% 100%, 0 100%, 0 18%);
   box-shadow: 0 14px 26px rgba(4, 8, 18, 0.34);
   overflow: hidden;
 }
 
-.team-jersey::before,
-.team-jersey::after {
+.team-jersey::before {
   content: '';
   position: absolute;
-  top: 18px;
-  width: 28px;
-  height: 74px;
-  border: 3px solid #161b2c;
-  border-bottom: 0;
-  border-radius: 24px 24px 0 0;
-  background: rgba(255, 255, 255, 0.9);
-}
-
-.team-jersey::before {
-  left: -5px;
-  transform: rotate(18deg);
-}
-
-.team-jersey::after {
-  right: -5px;
-  transform: rotate(-18deg);
-}
-
-.team-jersey__brand {
-  position: relative;
-  z-index: 1;
-  margin-top: 10px;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(15, 20, 34, 0.75);
+  top: -2px;
+  left: 50%;
+  width: 44%;
+  height: 28px;
+  transform: translateX(-50%);
+  border: 2px solid rgba(16, 22, 37, 0.82);
+  border-top: 0;
+  border-radius: 0 0 20px 20px;
+  background: rgba(6, 9, 20, 0.92);
 }
 
 .team-jersey__name {
   position: relative;
   z-index: 1;
-  margin-top: 20px;
+  margin-top: 16px;
   max-width: 92%;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 800;
   line-height: 1.08;
   letter-spacing: 0.08em;
@@ -300,16 +278,12 @@
   position: relative;
   z-index: 1;
   margin-top: auto;
-  font-size: clamp(48px, 6vw, 72px);
+  font-size: clamp(50px, 6vw, 76px);
   font-weight: 900;
   line-height: 0.92;
   letter-spacing: -0.06em;
   color: #101625;
-  text-shadow:
-    1px 0 0 rgba(246, 248, 255, 0.8),
-    -1px 0 0 rgba(246, 248, 255, 0.8),
-    0 1px 0 rgba(246, 248, 255, 0.8),
-    0 -1px 0 rgba(246, 248, 255, 0.8);
+  text-shadow: 2px 2px 0 rgba(246, 248, 255, 0.32);
 }
 
 @keyframes teamsReveal {
@@ -375,16 +349,16 @@
   }
 
   .team-card {
-    min-height: 188px;
+    min-height: 174px;
   }
 
   .team-jersey {
-    min-height: 176px;
-    padding: 16px 10px 14px;
+    min-height: 164px;
+    padding: 28px 10px 14px;
   }
 
   .team-jersey__name {
-    margin-top: 14px;
+    margin-top: 10px;
     font-size: 12px;
   }
 

@@ -108,7 +108,6 @@ function TeamsPage() {
                   style={{ '--card-delay': `${teamIndex * 80 + playerIndex * 26}ms` }}
                 >
                   <div className="team-jersey" aria-label={`${player.name} dorsal ${player.dorsal}`}>
-                    <span className="team-jersey__brand">Bay Bandits</span>
                     <span className="team-jersey__name">{player.name}</span>
                     <span className="team-jersey__number">{player.dorsal}</span>
                   </div>
