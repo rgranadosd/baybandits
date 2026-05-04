@@ -11,7 +11,6 @@ import LogoBB  from './assets/logos/baybandits.png'
 
 /* ── Home video sources ── */
 const VIDEO_MP4  = `${import.meta.env.BASE_URL}videos/bandits-wb.mp4`
-const HERO_VIDEO_MP4 = `${VIDEO_MP4}#t=0.001`
 
 const sponsorLogos = Object.entries(
   import.meta.glob('./assets/partners/*.{png,jpg,jpeg,svg,PNG,JPG,JPEG,SVG}', {
@@ -76,12 +75,19 @@ function App() {
     if (!vid) return
     let hasStarted = false
 
+    vid.autoplay = true
+    vid.loop = true
     vid.muted = true
     vid.defaultMuted = true
     vid.playsInline = true
     vid.setAttribute('muted', '')
     vid.setAttribute('playsinline', '')
     vid.setAttribute('webkit-playsinline', 'true')
+    vid.setAttribute('autoplay', '')
+
+    if (!vid.getAttribute('src')) {
+      vid.setAttribute('src', VIDEO_MP4)
+    }
 
     const tryPlay = () => {
       const playPromise = vid.play()
@@ -192,9 +198,7 @@ function App() {
       {/* ═══ SECTION 1 — Hero: Logo + Video + Mute ═══ */}
       <section className="snap-section hero-section">
         <div className="video-bg">
-          <video ref={videoRef} className="bg-vid" autoPlay loop muted playsInline preload="auto" disablePictureInPicture>
-            <source src={HERO_VIDEO_MP4}  type="video/mp4" />
-          </video>
+          <video ref={videoRef} className="bg-vid" autoPlay loop muted playsInline preload="auto" disablePictureInPicture />
         </div>
         <div className="overlay overlay--light" />
         <div className="hero-center anim-in">
