@@ -74,6 +74,7 @@ function App() {
   useEffect(() => {
     const vid = videoRef.current
     if (!vid) return
+    let hasStarted = false
 
     vid.muted = true
     vid.defaultMuted = true
@@ -96,11 +97,10 @@ function App() {
       }
     }
 
-    const unlockPlayback = () => {
-      tryPlay()
-      document.removeEventListener('touchstart', unlockPlayback)
-      document.removeEventListener('pointerdown', unlockPlayback)
-      document.removeEventListener('scroll', unlockPlayback)
+    const markStarted = () => {
+      hasStarted = true
+      window.clearInterval(retryPlayInterval)
+      window.clearTimeout(stopRetryTimeout)
     }
 
     vid.load()
@@ -111,17 +111,26 @@ function App() {
       if (document.visibilityState === 'visible') tryPlay()
     }
 
+    const retryPlayInterval = window.setInterval(() => {
+      if (hasStarted) return
+      primeFrame()
+      tryPlay()
+    }, 350)
+
+    const stopRetryTimeout = window.setTimeout(() => {
+      window.clearInterval(retryPlayInterval)
+    }, 8000)
+
     vid.addEventListener('canplay', tryPlay)
     vid.addEventListener('loadedmetadata', primeFrame)
     vid.addEventListener('loadedmetadata', tryPlay)
     vid.addEventListener('loadeddata', tryPlay)
+    vid.addEventListener('playing', markStarted)
+    vid.addEventListener('timeupdate', markStarted)
     vid.addEventListener('seeked', tryPlay)
     vid.addEventListener('suspend', tryPlay)
     document.addEventListener('visibilitychange', handleVisibility)
     window.addEventListener('pageshow', tryPlay)
-    document.addEventListener('touchstart', unlockPlayback, { passive: true })
-    document.addEventListener('pointerdown', unlockPlayback, { passive: true })
-    document.addEventListener('scroll', unlockPlayback, { passive: true })
 
     const updateProgress = () => {
       if (!vid.duration) return
@@ -140,15 +149,16 @@ function App() {
       vid.removeEventListener('loadedmetadata', primeFrame)
       vid.removeEventListener('loadedmetadata', tryPlay)
       vid.removeEventListener('loadeddata', tryPlay)
+      vid.removeEventListener('playing', markStarted)
+      vid.removeEventListener('timeupdate', markStarted)
       vid.removeEventListener('seeked', tryPlay)
       vid.removeEventListener('suspend', tryPlay)
       vid.removeEventListener('progress', updateProgress)
       vid.removeEventListener('canplaythrough', handleCanPlayThrough)
       document.removeEventListener('visibilitychange', handleVisibility)
       window.removeEventListener('pageshow', tryPlay)
-      document.removeEventListener('touchstart', unlockPlayback)
-      document.removeEventListener('pointerdown', unlockPlayback)
-      document.removeEventListener('scroll', unlockPlayback)
+      window.clearInterval(retryPlayInterval)
+      window.clearTimeout(stopRetryTimeout)
     }
   }, [])
 
