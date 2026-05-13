@@ -52,7 +52,10 @@
 }
 
 .teams-back {
+  appearance: none;
+  -webkit-appearance: none;
   justify-self: start;
+  font-family: inherit;
   text-decoration: none;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -63,6 +66,7 @@
   padding: 8px 14px;
   background: linear-gradient(90deg, rgba(255, 78, 163, 0.18), rgba(42, 168, 255, 0.18));
   box-shadow: 0 0 0 1px rgba(255, 78, 163, 0.18) inset;
+  cursor: pointer;
   transition: background 0.2s, color 0.2s, transform 0.2s;
 }
 

@@ -1,5 +1,5 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import './TeamsPage.css'
 import { rosters } from '../data/rosters.js'
 import Photo7 from '../assets/photos/Photo7.jpeg'
@@ -107,9 +107,51 @@ function JerseySvg({ name, dorsal }) {
 }
 
 function TeamsPage() {
+  const navigate = useNavigate()
   const sectionRefs = useRef(new Map())
+  const swipeStartRef = useRef(null)
   const [visibleSections, setVisibleSections] = useState(() => ({ [rosters[0].id]: true }))
   const [parallaxOffsets, setParallaxOffsets] = useState({})
+
+  const handleGoBack = () => {
+    navigate('/')
+  }
+
+  const handleTouchStart = (event) => {
+    const touch = event.changedTouches[0]
+
+    if (!touch) {
+      return
+    }
+
+    if (event.target.closest('a, button, .teams-index')) {
+      swipeStartRef.current = null
+      return
+    }
+
+    swipeStartRef.current = {
+      x: touch.clientX,
+      y: touch.clientY,
+    }
+  }
+
+  const handleTouchEnd = (event) => {
+    const start = swipeStartRef.current
+    const touch = event.changedTouches[0]
+
+    swipeStartRef.current = null
+
+    if (!start || !touch) {
+      return
+    }
+
+    const deltaX = touch.clientX - start.x
+    const deltaY = touch.clientY - start.y
+
+    if (deltaX < -72 && Math.abs(deltaX) > Math.abs(deltaY) * 1.35) {
+      handleGoBack()
+    }
+  }
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -197,13 +239,13 @@ function TeamsPage() {
   }
 
   return (
-    <div className="teams-page">
+    <div className="teams-page" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} onTouchCancel={() => { swipeStartRef.current = null }}>
       <div className="teams-page__bg" style={{ backgroundImage: `url(${Photo7})` }} />
       <div className="teams-page__overlay" />
       <div className="teams-page__transition" />
 
       <header className="teams-hero">
-        <Link to="/" className="teams-back">volver</Link>
+        <button type="button" className="teams-back" onClick={handleGoBack}>volver</button>
         <img
           src={LogoBB}
           alt="baybandits"
