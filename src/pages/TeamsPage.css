@@ -125,72 +125,6 @@
   border-radius: 999px;
 }
 
-.teams-selector {
-  width: min(1100px, 100%);
-  margin: 0 auto 16px;
-  padding: 14px;
-  border-radius: 16px;
-  border: 1px solid rgba(42, 168, 255, 0.38);
-  background: linear-gradient(145deg, rgba(255, 78, 163, 0.16), rgba(42, 168, 255, 0.16));
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  display: grid;
-  gap: 12px;
-}
-
-.teams-selector__label {
-  margin: 0;
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(246, 248, 255, 0.8);
-}
-
-.teams-selector__controls {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: 10px;
-  align-items: center;
-}
-
-.teams-selector__step {
-  border: 1px solid rgba(246, 248, 255, 0.28);
-  border-radius: 999px;
-  padding: 9px 12px;
-  background: rgba(10, 16, 32, 0.52);
-  color: rgba(246, 248, 255, 0.86);
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  font-size: 11px;
-  font-family: inherit;
-  cursor: pointer;
-  transition: background 0.15s ease, transform 0.15s ease, color 0.15s ease, opacity 0.15s ease;
-}
-
-.teams-selector__step:hover:not(:disabled) {
-  transform: translateY(-1px);
-  background: linear-gradient(90deg, var(--bb-pink), var(--bb-blue));
-  color: #070b16;
-}
-
-.teams-selector__step:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
-
-.teams-selector__select {
-  width: 100%;
-  min-height: 46px;
-  border-radius: 14px;
-  border: 1px solid rgba(42, 168, 255, 0.34);
-  background: rgba(10, 16, 32, 0.72);
-  color: rgba(246, 248, 255, 0.95);
-  font-family: inherit;
-  font-size: 13px;
-  padding: 0 14px;
-  outline: none;
-}
-
 .teams-content {
   width: min(1100px, 100%);
   margin: 0 auto;
@@ -283,20 +217,48 @@
 }
 
 .team-card {
+  position: relative;
+  isolation: isolate;
   min-height: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 4px;
+  padding: 12px 6px 8px;
   text-align: center;
-  transition: transform 0.15s ease;
+  transform-style: preserve-3d;
+  transition: transform 0.2s ease;
   opacity: 0;
-  animation: cardIn 0.42s ease forwards;
+  animation: cardIn 0.72s cubic-bezier(0.2, 0.9, 0.25, 1.18) forwards;
   animation-delay: var(--card-delay, 0ms);
 }
 
+.team-card::before {
+  content: '';
+  position: absolute;
+  inset: 12% 18% 20%;
+  z-index: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--team-accent-strong) 28%, transparent) 0%, transparent 72%);
+  opacity: 0;
+  filter: blur(18px);
+  animation: cardHalo 2.8s ease-out calc(var(--card-delay, 0ms) + 260ms) forwards;
+}
+
+.team-card::after {
+  content: '';
+  position: absolute;
+  inset: 16% 24% auto;
+  height: 42%;
+  z-index: 1;
+  background: linear-gradient(120deg, transparent 10%, rgba(255, 255, 255, 0.28) 46%, transparent 82%);
+  transform: translate3d(-150%, -8%, 0) rotate(-18deg);
+  opacity: 0;
+  pointer-events: none;
+  animation: jerseyShine 1.1s ease-out calc(var(--card-delay, 0ms) + 420ms) 1 forwards;
+}
+
 .team-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-6px) scale(1.03);
 }
 
 .team-block__loading {
@@ -318,15 +280,21 @@
 }
 
 .team-jersey-svg {
+  position: relative;
+  z-index: 2;
   width: 100%;
   height: auto;
   overflow: visible;
+  transform-origin: 50% 14%;
   filter: drop-shadow(0 14px 24px rgba(4, 8, 18, 0.28));
+  animation: jerseyFloat 5.2s ease-in-out calc(var(--card-delay, 0ms) + 900ms) infinite;
+  transition: transform 0.24s ease, filter 0.24s ease;
 }
 
 .team-jersey-svg__shadow {
   fill: rgba(8, 12, 24, 0.22);
   transform: translate(0, 3px);
+  transition: transform 0.24s ease, opacity 0.24s ease;
 }
 
 .team-jersey-svg__body {
@@ -334,6 +302,7 @@
   stroke: rgba(16, 22, 37, 0.9);
   stroke-width: 2.5;
   stroke-linejoin: round;
+  transition: transform 0.24s ease, filter 0.24s ease;
 }
 
 .team-jersey-svg__name {
@@ -348,6 +317,26 @@
   font-weight: 900;
   letter-spacing: -0.06em;
   fill: #101625;
+}
+
+.team-card:hover .team-jersey-svg,
+.team-card:focus-within .team-jersey-svg {
+  transform: translateY(-8px) rotate(-3deg) scale(1.05);
+  filter: drop-shadow(0 20px 36px rgba(4, 8, 18, 0.4)) drop-shadow(0 0 24px color-mix(in srgb, var(--team-accent-strong) 34%, transparent));
+}
+
+.team-card:hover .team-jersey-svg__shadow,
+.team-card:focus-within .team-jersey-svg__shadow {
+  transform: translate(0, 8px) scale(0.88);
+  opacity: 0.42;
+}
+
+.team-card:nth-child(2n) .team-jersey-svg {
+  animation-duration: 5.8s;
+}
+
+.team-card:nth-child(3n) .team-jersey-svg {
+  animation-duration: 4.9s;
 }
 
 @keyframes teamsReveal {
@@ -373,11 +362,55 @@
 @keyframes cardIn {
   0% {
     opacity: 0;
-    transform: translateY(10px) scale(0.97);
+    transform: translateY(46px) scale(0.78) rotateX(18deg);
+  }
+  62% {
+    opacity: 1;
+    transform: translateY(-6px) scale(1.04) rotateX(-6deg);
   }
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes cardHalo {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  42% {
+    opacity: 0.42;
+  }
+  100% {
+    opacity: 0.16;
+    transform: scale(1.18);
+  }
+}
+
+@keyframes jerseyShine {
+  0% {
+    opacity: 0;
+    transform: translate3d(-150%, -8%, 0) rotate(-18deg);
+  }
+  18% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(165%, 14%, 0) rotate(-18deg);
+  }
+}
+
+@keyframes jerseyFloat {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-7px) rotate(1.4deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
   }
 }
 
@@ -405,27 +438,6 @@
     padding: 14px 14px 18px;
   }
 
-  .teams-selector {
-    padding: 10px;
-    border-radius: 12px;
-    gap: 10px;
-  }
-
-  .teams-selector__controls {
-    grid-template-columns: 1fr;
-    padding: 10px;
-    gap: 8px;
-  }
-
-  .teams-selector__step,
-  .teams-selector__select {
-    width: 100%;
-  }
-
-  .teams-selector__step {
-    min-height: 42px;
-  }
-
   .teams-content {
     gap: 14px;
   }
@@ -446,6 +458,7 @@
 
   .team-card {
     min-height: 0;
+    padding: 8px 2px 4px;
   }
 }
 

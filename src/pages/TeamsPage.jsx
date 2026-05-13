@@ -115,8 +115,6 @@ function TeamsPage() {
   const swipeStartRef = useRef(null)
   const [visibleSections, setVisibleSections] = useState(() => ({ [rosters[0].id]: true }))
   const [parallaxOffsets, setParallaxOffsets] = useState({})
-  const [activeTeamId, setActiveTeamId] = useState(rosters[0].id)
-  const activeTeamIndex = rosters.findIndex((team) => team.id === activeTeamId)
 
   const handleGoBack = useCallback(() => {
     if (window.history.length > 1) {
@@ -126,34 +124,6 @@ function TeamsPage() {
 
     navigate('/')
   }, [navigate])
-
-  const scrollToTeam = useCallback((teamId) => {
-    const node = sectionRefs.current.get(teamId)
-
-    setActiveTeamId(teamId)
-
-    if (!node) {
-      return
-    }
-
-    node.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }, [])
-
-  const handlePrevTeam = useCallback(() => {
-    if (activeTeamIndex <= 0) {
-      return
-    }
-
-    scrollToTeam(rosters[activeTeamIndex - 1].id)
-  }, [activeTeamIndex, scrollToTeam])
-
-  const handleNextTeam = useCallback(() => {
-    if (activeTeamIndex === -1 || activeTeamIndex >= rosters.length - 1) {
-      return
-    }
-
-    scrollToTeam(rosters[activeTeamIndex + 1].id)
-  }, [activeTeamIndex, scrollToTeam])
 
   const handleTouchStart = (event) => {
     const touch = event.changedTouches[0]
@@ -167,7 +137,7 @@ function TeamsPage() {
       return
     }
 
-    if (event.target.closest('a, button, input, textarea, select, .teams-header, .teams-selector')) {
+    if (event.target.closest('a, button, input, textarea, select, .teams-header')) {
       swipeStartRef.current = null
       return
     }
@@ -245,8 +215,6 @@ function TeamsPage() {
         return
       }
 
-      let nearestId = ''
-      let nearestDistance = Number.POSITIVE_INFINITY
       const rootRect = scrollRoot.getBoundingClientRect()
       const rootCenter = rootRect.top + rootRect.height * 0.5
 
@@ -265,12 +233,6 @@ function TeamsPage() {
           const rect = node.getBoundingClientRect()
           const distanceFromCenter = rootCenter - (rect.top + rect.height * 0.5)
           const shift = Math.max(-48, Math.min(48, Number((distanceFromCenter * 0.12).toFixed(2))))
-          const absDistance = Math.abs(distanceFromCenter)
-
-          if (absDistance < nearestDistance) {
-            nearestDistance = absDistance
-            nearestId = sectionId
-          }
 
           next[sectionId] = shift
 
@@ -281,10 +243,6 @@ function TeamsPage() {
 
         return changed ? next : current
       })
-
-      if (nearestId) {
-        setActiveTeamId((current) => (current === nearestId ? current : nearestId))
-      }
     }
 
     const scheduleParallaxUpdate = () => {
@@ -351,38 +309,6 @@ function TeamsPage() {
       </header>
 
       <div className="teams-scroll" ref={scrollRef}>
-        <section className="teams-selector" aria-label="Selector de equipos">
-          <label className="teams-selector__label" htmlFor="teams-select">Selecciona equipo</label>
-          <div className="teams-selector__controls">
-            <button
-              type="button"
-              className="teams-selector__step"
-              onClick={handlePrevTeam}
-              disabled={activeTeamIndex <= 0}
-            >
-              anterior
-            </button>
-            <select
-              id="teams-select"
-              className="teams-selector__select"
-              value={activeTeamId}
-              onChange={(event) => scrollToTeam(event.target.value)}
-            >
-              {rosters.map((team) => (
-                <option key={team.id} value={team.id}>{team.name}</option>
-              ))}
-            </select>
-            <button
-              type="button"
-              className="teams-selector__step"
-              onClick={handleNextTeam}
-              disabled={activeTeamIndex === -1 || activeTeamIndex >= rosters.length - 1}
-            >
-              siguiente
-            </button>
-          </div>
-        </section>
-
         <main className="teams-content">
         {rosters.map((team, teamIndex) => (
           (() => {
