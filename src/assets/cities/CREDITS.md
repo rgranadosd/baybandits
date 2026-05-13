@@ -11,9 +11,9 @@ City images used in calendar cards, downloaded from Wikimedia Commons.
   - License: Public domain
 
 - sabadell.jpg
-  - Source: https://commons.wikimedia.org/wiki/File:Sabadell_-_Vista_des_de_l%27Aeroclub_1.jpg
-  - Author: Jordiferrer
-  - License: CC BY-SA 4.0
+  - Source: https://commons.wikimedia.org/wiki/File:Sabadell_(Barcelona)_10.jpg
+  - Author: Zarateman
+  - License: CC0
 
 - gava.jpg
   - Source: https://commons.wikimedia.org/wiki/File:Gavamar.jpg
