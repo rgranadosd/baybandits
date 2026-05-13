@@ -256,9 +256,9 @@ function App() {
         <div className="cta-bg" style={{ backgroundImage: `url(${Photo10})` }} />
         <div className="overlay overlay--light-wash" />
         <div className="cta-content anim-in">
-          <a href="https://hcsbhandbol.com/horari-platja/" target="_blank" rel="noreferrer" className="cta-button cta-button--dark">
+          <Link to="/calendario" className="cta-button cta-button--dark">
             {t.cta2}
-          </a>
+          </Link>
         </div>
       </section>
 
@@ -300,7 +300,7 @@ function App() {
             {/* Col 2 — Info */}
             <div className="footer-col footer-col--nav">
               <a href="https://hcsbhandbol.com/historia/" target="_blank" rel="noreferrer">{t.club}</a>
-              <a href="https://hcsbhandbol.com/horari-platja/" target="_blank" rel="noreferrer">{t.horaris}</a>
+              <Link to="/calendario">{t.horaris}</Link>
               <a href="https://hcsbhandbol.com/inscripciones/" target="_blank" rel="noreferrer">{t.inscripcions}</a>
             </div>
 
