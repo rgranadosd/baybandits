@@ -326,7 +326,6 @@ function App() {
             {/* Col 2 — Info */}
             <div className="footer-col footer-col--nav">
               <a href="https://hcsbhandbol.com/historia/" target="_blank" rel="noreferrer">{t.club}</a>
-              <Link to="/calendario">{t.horaris}</Link>
               <a href="https://hcsbhandbol.com/inscripciones/" target="_blank" rel="noreferrer">{t.inscripcions}</a>
             </div>
 
