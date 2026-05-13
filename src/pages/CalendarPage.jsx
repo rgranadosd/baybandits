@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import './CalendarPage.css'
 import EstartitCity from '../assets/cities/estartit.jpg'
 import GavaCity from '../assets/cities/gava.jpg'
@@ -21,8 +21,8 @@ const circuits = [
     title: 'Circuito Nacional',
     summary: 'Paradas clave del circuito estatal con presencia de los principales equipos nacionales.',
     region: 'España',
-    accent: '#7aa7bf',
-    accentSoft: 'rgba(122, 167, 191, 0.24)',
+    accent: '#2aa8ff',
+    accentSoft: 'rgba(42, 168, 255, 0.24)',
     events: [
       {
         dates: '12-14 junio',
@@ -43,8 +43,8 @@ const circuits = [
     title: 'Circuito Catalán',
     summary: 'Calendario oficial del circuito catalán con cinco sedes y trazado competitivo continuo.',
     region: 'Cataluña',
-    accent: '#d88962',
-    accentSoft: 'rgba(216, 137, 98, 0.24)',
+    accent: '#ff4ea3',
+    accentSoft: 'rgba(255, 78, 163, 0.24)',
     events: [
       {
         dates: '6-7 junio',
@@ -115,7 +115,7 @@ function CalendarPage() {
       return
     }
 
-    if (event.target.closest('a, button, input, textarea, select, .teams-header')) {
+    if (event.target.closest('a, button, input, textarea, select, .calendar-topbar')) {
       swipeStartRef.current = null
       return
     }
@@ -165,12 +165,6 @@ function CalendarPage() {
           volver
         </button>
 
-        <nav className="calendar-topbar__nav" aria-label="Navegación calendario">
-          <Link to="/">Inicio</Link>
-          <Link to="/equipos">Plantilla</Link>
-          <span aria-current="page">Calendario</span>
-        </nav>
-
         <button className="calendar-topbar__brand" onClick={() => navigate('/')} aria-label="Ir a la home">
           <img
             src={LogoBB}
@@ -190,9 +184,6 @@ function CalendarPage() {
           <h1>
             Calendario Oficial <span className="calendar-hero__year">2026</span>
           </h1>
-          <p className="calendar-hero__lead">
-            Agenda competitiva de la temporada con sedes confirmadas y lectura clara por circuito.
-          </p>
 
           <dl className="calendar-hero__stats">
             <div>
