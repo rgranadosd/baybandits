@@ -32,17 +32,15 @@ const sponsorLogos = Object.entries(
 
 const i18n = {
   es: {
-    heroTitle: 'Bay Bandits by Laura Granados',
-    heroLead: 'Laura Granados lidera Bay Bandits para impulsar el balonmano playa en Sant Boi.',
     cta1: 'nuestros equipos',
     cta2: 'calendario 2026',
-    lauraPhotoCaption: 'Photo11: Laura Granados, referente del proyecto Bay Bandits.',
+    lauraPhotoCaption: 'Photo11: Laura Granados, jugadora de Bay Bandits.',
     contact: 'CONTACTO',
     club: 'El Club',
     horaris: 'Horarios Playa',
     inscripcions: 'Inscripciones',
-    seccio: 'Sección de balonmano playa del Handbol Cooperativa Sant Boi, con Laura Granados como figura clave del proyecto.',
-    stats: '7 equipos · 100+ jugadores · Proyecto de Laura Granados · Est. 2023',
+    seccio: 'Sección de balonmano playa del Handbol Cooperativa Sant Boi.',
+    stats: '7 equipos · 100+ jugadores · Est. 2023',
     sponsorsKicker: 'Partners oficiales',
     sponsors: 'Patrocinadores',
     sponsorsLead: 'Marcas que apoyan nuestro proyecto deportivo.',
@@ -50,17 +48,15 @@ const i18n = {
     privacy: 'Política de privacidad',
   },
   ca: {
-    heroTitle: 'Bay Bandits by Laura Granados',
-    heroLead: "Laura Granados lidera Bay Bandits per impulsar l'handbol platja a Sant Boi.",
     cta1: 'els nostres equips',
     cta2: 'calendari 2026',
-    lauraPhotoCaption: 'Photo11: Laura Granados, referent del projecte Bay Bandits.',
+    lauraPhotoCaption: 'Photo11: Laura Granados, jugadora de Bay Bandits.',
     contact: 'CONTACTE',
     club: 'El Club',
     horaris: 'Horaris Platja',
     inscripcions: 'Inscripcions',
-    seccio: "Secció d'handbol platja de l'Handbol Cooperativa Sant Boi, amb Laura Granados com a figura clau del projecte.",
-    stats: '7 equips · 100+ jugadors · Projecte de Laura Granados · Est. 2023',
+    seccio: "Secció d'handbol platja de l'Handbol Cooperativa Sant Boi.",
+    stats: '7 equips · 100+ jugadors · Est. 2023',
     sponsorsKicker: 'Partners oficials',
     sponsors: 'Patrocinadors',
     sponsorsLead: 'Marques que donen suport al nostre projecte esportiu.',
@@ -225,9 +221,7 @@ function App() {
         </div>
         <div className="overlay overlay--light" />
         <div className="hero-center anim-in visible">
-          <h1 className="hero-title">{t.heroTitle}</h1>
           <img src={LogoBB} alt="baybandits" className="logo-intro__mark" />
-          <p className="hero-lead">{t.heroLead}</p>
           {videoPct < 100 && (
             <div className="vid-progress" role="progressbar" aria-valuenow={videoPct} aria-valuemin={0} aria-valuemax={100}>
               <div className="vid-progress__bar" style={{ width: `${videoPct}%` }} />
@@ -241,7 +235,7 @@ function App() {
         <div className="cta-bg cta-bg--image">
           <img
             src={Photo11}
-            alt="Laura Granados en Photo11, imagen destacada de Bay Bandits"
+            alt="Laura Granados en Photo11, jugadora de Bay Bandits"
             className="cta-photo"
             loading="eager"
             fetchPriority="high"
