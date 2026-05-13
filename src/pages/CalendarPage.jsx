@@ -274,12 +274,17 @@ function CalendarPage() {
               </div>
 
               <ol className="calendar-events" aria-label={circuit.title}>
-                {circuit.events.map((event) => (
+                {circuit.events.map((event, eventIndex) => (
                   <li key={`${circuit.id}-${event.dates}-${event.name}`} className="calendar-event">
-                    <div
-                      className="calendar-event__media"
-                      style={{ backgroundImage: `linear-gradient(180deg, rgba(8, 12, 24, 0.14), rgba(8, 12, 24, 0.68)), url(${event.image})` }}
-                    >
+                    <div className="calendar-event__media">
+                      <div
+                        className="calendar-event__photo"
+                        style={{
+                          backgroundImage: `url(${event.image})`,
+                          animationDelay: `${eventIndex * -4}s`,
+                        }}
+                      />
+                      <div className="calendar-event__overlay" />
                       <span className="calendar-event__city">{event.location}</span>
                     </div>
                     <div className="calendar-event__body">
