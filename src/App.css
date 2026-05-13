@@ -30,7 +30,7 @@
   background: #000;
   z-index: 9999;
   pointer-events: none;
-  animation: transitionOut 0.9s cubic-bezier(0.77, 0, 0.175, 1) 0.1s forwards;
+  animation: transitionOut 0.45s cubic-bezier(0.77, 0, 0.175, 1) 0.05s forwards;
 }
 
 @keyframes transitionOut {
@@ -135,6 +135,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 10px;
+  text-align: center;
 }
 
 .hero-center::before {
@@ -160,6 +162,28 @@
 
 .logo-intro__mark:hover {
   transform: scale(1.04);
+}
+
+.hero-title {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  font-size: clamp(20px, 2.2vw, 34px);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+.hero-lead {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  width: min(700px, 84vw);
+  font-size: clamp(12px, 1.35vw, 18px);
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: rgba(246, 248, 255, 0.9);
+  text-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
 }
 
 .vid-progress {
@@ -199,6 +223,19 @@
   filter: grayscale(1);
 }
 
+.cta-bg--image {
+  filter: none;
+}
+
+.cta-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: grayscale(1);
+  transform: scale(1.01);
+}
+
 /* Dark variant (section 2): dark overlay over grayscale photo */
 .cta-section--dark .overlay--dark {
   background:
@@ -221,8 +258,19 @@
   position: relative;
   z-index: 3;
   display: flex;
+  flex-direction: column;
+  gap: 12px;
   align-items: center;
   justify-content: center;
+}
+
+.laura-photo-caption {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(245, 245, 245, 0.82);
+  text-shadow: 0 4px 14px rgba(0, 0, 0, 0.55);
 }
 
 /* Default button: corporate ink core + gradient edge */
@@ -574,6 +622,21 @@
   .cta-button {
     padding: 14px 32px;
     font-size: 14px;
+  }
+
+  .hero-title {
+    width: 92vw;
+    letter-spacing: 0.05em;
+  }
+
+  .hero-lead {
+    width: 90vw;
+  }
+
+  .laura-photo-caption {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    width: 90vw;
   }
 
   /* Disable fixed bg on mobile (not supported on iOS) */

@@ -10,7 +10,8 @@ import Photo7  from './assets/photos/Photo7.jpeg'
 import LogoBB  from './assets/logos/baybandits.png'
 
 /* ── Home video sources ── */
-const VIDEO_MP4  = `${import.meta.env.BASE_URL}videos/bandits-wb.mp4`
+const VIDEO_MP4  = `${import.meta.env.BASE_URL}videos/bandits-wb-fast.mp4`
+const VIDEO_POSTER = `${import.meta.env.BASE_URL}videos/bandits-wb-poster.jpg`
 
 const sponsorLogos = Object.entries(
   import.meta.glob('./assets/partners/*.{png,jpg,jpeg,svg,PNG,JPG,JPEG,SVG}', {
@@ -31,14 +32,17 @@ const sponsorLogos = Object.entries(
 
 const i18n = {
   es: {
+    heroTitle: 'Bay Bandits by Laura Granados',
+    heroLead: 'Laura Granados lidera Bay Bandits para impulsar el balonmano playa en Sant Boi.',
     cta1: 'nuestros equipos',
     cta2: 'calendario 2026',
+    lauraPhotoCaption: 'Photo11: Laura Granados, referente del proyecto Bay Bandits.',
     contact: 'CONTACTO',
     club: 'El Club',
     horaris: 'Horarios Playa',
     inscripcions: 'Inscripciones',
-    seccio: 'Sección de balonmano playa del Handbol Cooperativa Sant Boi.',
-    stats: '7 equipos · 100+ jugadores · Est. 2023',
+    seccio: 'Sección de balonmano playa del Handbol Cooperativa Sant Boi, con Laura Granados como figura clave del proyecto.',
+    stats: '7 equipos · 100+ jugadores · Proyecto de Laura Granados · Est. 2023',
     sponsorsKicker: 'Partners oficiales',
     sponsors: 'Patrocinadores',
     sponsorsLead: 'Marcas que apoyan nuestro proyecto deportivo.',
@@ -46,14 +50,17 @@ const i18n = {
     privacy: 'Política de privacidad',
   },
   ca: {
+    heroTitle: 'Bay Bandits by Laura Granados',
+    heroLead: "Laura Granados lidera Bay Bandits per impulsar l'handbol platja a Sant Boi.",
     cta1: 'els nostres equips',
     cta2: 'calendari 2026',
+    lauraPhotoCaption: 'Photo11: Laura Granados, referent del projecte Bay Bandits.',
     contact: 'CONTACTE',
     club: 'El Club',
     horaris: 'Horaris Platja',
     inscripcions: 'Inscripcions',
-    seccio: "Secció d'handbol platja de l'Handbol Cooperativa Sant Boi.",
-    stats: '7 equips · 100+ jugadors · Est. 2023',
+    seccio: "Secció d'handbol platja de l'Handbol Cooperativa Sant Boi, amb Laura Granados com a figura clau del projecte.",
+    stats: '7 equips · 100+ jugadors · Projecte de Laura Granados · Est. 2023',
     sponsorsKicker: 'Partners oficials',
     sponsors: 'Patrocinadors',
     sponsorsLead: 'Marques que donen suport al nostre projecte esportiu.',
@@ -84,10 +91,6 @@ function App() {
     vid.setAttribute('playsinline', '')
     vid.setAttribute('webkit-playsinline', 'true')
     vid.setAttribute('autoplay', '')
-
-    if (!vid.getAttribute('src')) {
-      vid.setAttribute('src', VIDEO_MP4)
-    }
 
     const tryPlay = () => {
       const playPromise = vid.play()
@@ -173,9 +176,17 @@ function App() {
     const els = document.querySelectorAll('.anim-in')
     const obs = new IntersectionObserver(
       entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') }),
-      { threshold: 0.15 }
+      { threshold: 0.15, root: pageRef.current }
     )
-    els.forEach(el => obs.observe(el))
+
+    els.forEach(el => {
+      const rect = el.getBoundingClientRect()
+      if (rect.top < window.innerHeight * 0.92) {
+        el.classList.add('visible')
+      }
+      obs.observe(el)
+    })
+
     return () => obs.disconnect()
   }, [])
 
@@ -198,11 +209,25 @@ function App() {
       {/* ═══ SECTION 1 — Hero: Logo + Video + Mute ═══ */}
       <section className="snap-section hero-section">
         <div className="video-bg">
-          <video ref={videoRef} className="bg-vid" autoPlay loop muted playsInline preload="auto" disablePictureInPicture />
+          <video
+            ref={videoRef}
+            className="bg-vid"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            poster={VIDEO_POSTER}
+            disablePictureInPicture
+          >
+            <source src={VIDEO_MP4} type="video/mp4" />
+          </video>
         </div>
         <div className="overlay overlay--light" />
-        <div className="hero-center anim-in">
+        <div className="hero-center anim-in visible">
+          <h1 className="hero-title">{t.heroTitle}</h1>
           <img src={LogoBB} alt="baybandits" className="logo-intro__mark" />
+          <p className="hero-lead">{t.heroLead}</p>
           {videoPct < 100 && (
             <div className="vid-progress" role="progressbar" aria-valuenow={videoPct} aria-valuemin={0} aria-valuemax={100}>
               <div className="vid-progress__bar" style={{ width: `${videoPct}%` }} />
@@ -213,12 +238,22 @@ function App() {
 
       {/* ═══ SECTION 2 — CTA Equips (grayscale + dark overlay) ═══ */}
       <section className="snap-section cta-section cta-section--dark">
-        <div className="cta-bg" style={{ backgroundImage: `url(${Photo11})` }} />
+        <div className="cta-bg cta-bg--image">
+          <img
+            src={Photo11}
+            alt="Laura Granados en Photo11, imagen destacada de Bay Bandits"
+            className="cta-photo"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+          />
+        </div>
         <div className="overlay overlay--dark" />
         <div className="cta-content anim-in">
           <Link to="/equipos" className="cta-button">
             {t.cta1}
           </Link>
+          <p className="laura-photo-caption">{t.lauraPhotoCaption}</p>
         </div>
       </section>
 
