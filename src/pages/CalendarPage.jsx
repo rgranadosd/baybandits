@@ -274,14 +274,11 @@ function CalendarPage() {
               </div>
 
               <ol className="calendar-events" aria-label={circuit.title}>
-                {circuit.events.map((event, eventIndex) => (
+                {circuit.events.map((event) => (
                   <li key={`${circuit.id}-${event.dates}-${event.name}`} className="calendar-event">
                     <div
                       className="calendar-event__media"
-                      style={{
-                        '--calendar-event-image': `url(${event.image})`,
-                        '--calendar-event-shift': `${((parallaxOffsets[circuit.id] ?? 0) * (eventIndex % 2 === 0 ? 1.45 : -1.15)).toFixed(2)}px`,
-                      }}
+                      style={{ backgroundImage: `linear-gradient(180deg, rgba(8, 12, 24, 0.14), rgba(8, 12, 24, 0.68)), url(${event.image})` }}
                     >
                       <span className="calendar-event__city">{event.location}</span>
                     </div>
