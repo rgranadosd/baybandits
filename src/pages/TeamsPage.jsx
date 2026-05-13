@@ -1,4 +1,4 @@
-import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './TeamsPage.css'
 import { rosters } from '../data/rosters.js'
@@ -14,6 +14,15 @@ const SHIRT_NAME_MAX_WIDTH = 52
 const SHIRT_NAME_FONT_SIZE = 9.5
 const SHIRT_NAME_MIN_FONT_SIZE = 6
 const SHIRT_NUMBER_FONT_SIZE = 34
+const EDGE_BACK_ZONE = 36
+const BACK_SWIPE_MIN_DISTANCE = 72
+
+function normalizeForSearch(value) {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+}
 
 const TEAM_THEMES = {
   pink: {
@@ -110,12 +119,46 @@ function TeamsPage() {
   const navigate = useNavigate()
   const sectionRefs = useRef(new Map())
   const swipeStartRef = useRef(null)
+  const [query, setQuery] = useState('')
+  const [category, setCategory] = useState('all')
   const [visibleSections, setVisibleSections] = useState(() => ({ [rosters[0].id]: true }))
   const [parallaxOffsets, setParallaxOffsets] = useState({})
+  const [activeTeamId, setActiveTeamId] = useState(rosters[0].id)
 
-  const handleGoBack = () => {
+  const normalizedQuery = normalizeForSearch(query.trim())
+
+  const filteredRosters = useMemo(() => rosters.filter((team) => {
+    const isFeminine = team.id.includes('femeni')
+    const matchesCategory = category === 'all' || (category === 'femeni' ? isFeminine : !isFeminine)
+
+    if (!matchesCategory) {
+      return false
+    }
+
+    if (!normalizedQuery) {
+      return true
+    }
+
+    const searchBlob = normalizeForSearch([
+      team.name,
+      team.coach,
+      ...team.players.map((player) => player.name),
+      ...team.players.map((player) => String(player.dorsal)),
+    ].join(' '))
+
+    return searchBlob.includes(normalizedQuery)
+  }), [category, normalizedQuery])
+
+  const hasNoResults = filteredRosters.length === 0
+
+  const handleGoBack = useCallback(() => {
+    if (window.history.length > 1) {
+      navigate(-1)
+      return
+    }
+
     navigate('/')
-  }
+  }, [navigate])
 
   const handleTouchStart = (event) => {
     const touch = event.changedTouches[0]
@@ -124,7 +167,12 @@ function TeamsPage() {
       return
     }
 
-    if (event.target.closest('a, button, .teams-index')) {
+    if (touch.clientX > EDGE_BACK_ZONE) {
+      swipeStartRef.current = null
+      return
+    }
+
+    if (event.target.closest('a, button, input, textarea, select, .teams-index, .teams-toolbar')) {
       swipeStartRef.current = null
       return
     }
@@ -148,10 +196,23 @@ function TeamsPage() {
     const deltaX = touch.clientX - start.x
     const deltaY = touch.clientY - start.y
 
-    if (deltaX < -72 && Math.abs(deltaX) > Math.abs(deltaY) * 1.35) {
+    if (deltaX > BACK_SWIPE_MIN_DISTANCE && Math.abs(deltaX) > Math.abs(deltaY) * 1.2) {
       handleGoBack()
     }
   }
+
+  useEffect(() => {
+    if (!filteredRosters.length) {
+      setActiveTeamId('')
+      return
+    }
+
+    const stillVisible = filteredRosters.some((team) => team.id === activeTeamId)
+
+    if (!stillVisible) {
+      setActiveTeamId(filteredRosters[0].id)
+    }
+  }, [activeTeamId, filteredRosters])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -179,24 +240,46 @@ function TeamsPage() {
       },
     )
 
-    sectionRefs.current.forEach((node) => observer.observe(node))
+    filteredRosters.forEach((team) => {
+      const node = sectionRefs.current.get(team.id)
+
+      if (node) {
+        observer.observe(node)
+      }
+    })
 
     return () => observer.disconnect()
-  }, [])
+  }, [filteredRosters])
 
   useEffect(() => {
     let animationFrame = 0
 
     const updateParallax = () => {
       animationFrame = 0
+      let nearestId = ''
+      let nearestDistance = Number.POSITIVE_INFINITY
+
       setParallaxOffsets((current) => {
         let changed = false
         const next = {}
 
-        sectionRefs.current.forEach((node, sectionId) => {
+        filteredRosters.forEach((team) => {
+          const node = sectionRefs.current.get(team.id)
+
+          if (!node) {
+            return
+          }
+
+          const sectionId = team.id
           const rect = node.getBoundingClientRect()
           const distanceFromCenter = window.innerHeight * 0.5 - (rect.top + rect.height * 0.5)
           const shift = Math.max(-48, Math.min(48, Number((distanceFromCenter * 0.12).toFixed(2))))
+          const absDistance = Math.abs(distanceFromCenter)
+
+          if (absDistance < nearestDistance) {
+            nearestDistance = absDistance
+            nearestId = sectionId
+          }
 
           next[sectionId] = shift
 
@@ -207,6 +290,10 @@ function TeamsPage() {
 
         return changed ? next : current
       })
+
+      if (nearestId) {
+        setActiveTeamId((current) => (current === nearestId ? current : nearestId))
+      }
     }
 
     const scheduleParallaxUpdate = () => {
@@ -227,7 +314,18 @@ function TeamsPage() {
         window.cancelAnimationFrame(animationFrame)
       }
     }
-  }, [])
+  }, [filteredRosters])
+
+  useEffect(() => {
+    const handleKeydown = (event) => {
+      if (event.key === 'Escape') {
+        handleGoBack()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeydown)
+    return () => window.removeEventListener('keydown', handleKeydown)
+  }, [handleGoBack])
 
   const setSectionRef = (sectionId, node) => {
     if (node) {
@@ -240,12 +338,14 @@ function TeamsPage() {
 
   return (
     <div className="teams-page" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} onTouchCancel={() => { swipeStartRef.current = null }}>
+      <button type="button" className="teams-back teams-back--floating" onClick={handleGoBack}>
+        volver
+      </button>
       <div className="teams-page__bg" style={{ backgroundImage: `url(${Photo7})` }} />
       <div className="teams-page__overlay" />
       <div className="teams-page__transition" />
 
       <header className="teams-hero">
-        <button type="button" className="teams-back" onClick={handleGoBack}>volver</button>
         <img
           src={LogoBB}
           alt="baybandits"
@@ -259,16 +359,77 @@ function TeamsPage() {
         <h1 className="teams-title">Nuestros Equipos</h1>
       </header>
 
-      <nav className="teams-index" aria-label="Indice de equipos">
-        {rosters.map((team) => (
-          <a key={team.id} href={`#${team.id}`} className="teams-index__item">
-            {team.name}
-          </a>
-        ))}
-      </nav>
+      <section className="teams-toolbar" aria-label="Filtros de equipos">
+        <div className="teams-search">
+          <label className="teams-search__label" htmlFor="teams-search-input">Buscar</label>
+          <input
+            id="teams-search-input"
+            type="search"
+            className="teams-search__input"
+            placeholder="Equipo, entrenador, jugador o dorsal"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+          />
+          {query && (
+            <button type="button" className="teams-search__clear" onClick={() => setQuery('')}>limpiar</button>
+          )}
+        </div>
+
+        <div className="teams-filter-tabs" role="tablist" aria-label="Filtrar por categoria">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={category === 'all'}
+            className={`teams-filter-tabs__item ${category === 'all' ? 'is-active' : ''}`}
+            onClick={() => setCategory('all')}
+          >
+            todos
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={category === 'femeni'}
+            className={`teams-filter-tabs__item ${category === 'femeni' ? 'is-active' : ''}`}
+            onClick={() => setCategory('femeni')}
+          >
+            femenino
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={category === 'masculi'}
+            className={`teams-filter-tabs__item ${category === 'masculi' ? 'is-active' : ''}`}
+            onClick={() => setCategory('masculi')}
+          >
+            masculino
+          </button>
+        </div>
+
+        <p className="teams-toolbar__meta">{filteredRosters.length} equipos visibles</p>
+      </section>
+
+      {!hasNoResults && (
+        <nav className="teams-index" aria-label="Indice de equipos">
+          {filteredRosters.map((team) => (
+            <a
+              key={team.id}
+              href={`#${team.id}`}
+              className={`teams-index__item ${activeTeamId === team.id ? 'is-active' : ''}`}
+              onClick={() => setActiveTeamId(team.id)}
+            >
+              {team.name}
+            </a>
+          ))}
+        </nav>
+      )}
 
       <main className="teams-content">
-        {rosters.map((team, teamIndex) => (
+        {hasNoResults ? (
+          <section className="team-empty-state" aria-live="polite">
+            <h2>No hemos encontrado equipos</h2>
+            <p>Prueba otro nombre, dorsal o cambia el filtro.</p>
+          </section>
+        ) : filteredRosters.map((team, teamIndex) => (
           (() => {
             const theme = getTeamTheme(team.id)
             const isVisible = Boolean(visibleSections[team.id])
