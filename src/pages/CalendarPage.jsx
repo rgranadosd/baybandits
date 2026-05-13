@@ -225,15 +225,17 @@ function CalendarPage() {
           volver
         </button>
         <h1 className="teams-title">Calendario 2026</h1>
-        <img
-          src={LogoBB}
-          alt="baybandits"
-          className="teams-logo"
-          onError={(event) => {
-            event.currentTarget.onerror = null
-            event.currentTarget.src = LOGO_FALLBACK
-          }}
-        />
+        <button className="teams-logo-btn" onClick={() => navigate('/')} aria-label="Ir a la home">
+          <img
+            src={LogoBB}
+            alt="baybandits"
+            className="teams-logo"
+            onError={(event) => {
+              event.currentTarget.onerror = null
+              event.currentTarget.src = LOGO_FALLBACK
+            }}
+          />
+        </button>
       </header>
 
       <div className="teams-scroll" ref={scrollRef}>
