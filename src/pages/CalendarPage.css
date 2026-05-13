@@ -2,6 +2,7 @@
 
 .calendar-page .teams-page__bg {
   filter: grayscale(0.58) saturate(0.92);
+  transition: transform 0.18s linear;
 }
 
 .calendar-content {
@@ -33,6 +34,11 @@
   background:
     radial-gradient(circle at 14% 18%, rgba(255, 78, 163, 0.16) 0%, rgba(255, 78, 163, 0) 40%),
     radial-gradient(circle at 85% 20%, rgba(42, 168, 255, 0.18) 0%, rgba(42, 168, 255, 0) 42%);
+}
+
+.calendar-block::before {
+  transform: translateY(var(--calendar-parallax-shift, 0px)) scale(1.05);
+  transition: transform 0.18s linear, opacity 0.3s ease;
 }
 
 .calendar-kicker,
