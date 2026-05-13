@@ -151,10 +151,7 @@
 
 .calendar-event__photo {
   position: absolute;
-  top: -10%;
-  left: -10%;
-  width: 120%;
-  height: 120%;
+  inset: 0;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -178,7 +175,7 @@
 
 @keyframes kenBurns {
   from { transform: scale(1.0) translate(0%, 0%); }
-  to   { transform: scale(1.18) translate(2%, -2%); }
+  to   { transform: scale(1.22) translate(2%, -2%); }
 }
 
 .calendar-event__city {
