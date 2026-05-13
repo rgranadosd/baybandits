@@ -247,7 +247,7 @@ function App() {
           <Link to="/equipos" className="cta-button">
             {t.cta1}
           </Link>
-          <p className="laura-photo-caption">{t.lauraPhotoCaption}</p>
+          <p className="laura-photo-caption" hidden>{t.lauraPhotoCaption}</p>
         </div>
       </section>
 
