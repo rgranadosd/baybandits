@@ -292,7 +292,7 @@ function App() {
             {/* Col 1 — Contacte */}
             <div className="footer-col">
               <h4>{t.contact}</h4>
-              <a href="mailto:hcsbhandbol@gmail.com">hcsbhandbol@gmail.com</a>
+              <a href="mailto:baybnaditsbh@gmail.com">baybnaditsbh@gmail.com</a>
               <a href="tel:+34661342473">+34 661 34 24 73</a>
               <p>C/ de Lluís Companys, 23<br/>08830 Sant Boi de Llobregat<br/>(Barcelona)</p>
             </div>
@@ -320,7 +320,7 @@ function App() {
             <a href="https://twitter.com/hcsantboi" target="_blank" rel="noreferrer" aria-label="Twitter / X">
               <svg viewBox="0 0 512 512" fill="currentColor" width="18" height="18"><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8l164.9-188.5L26.8 48H172.4l102.5 135.5zm-24.8 373.8h39.1L151.1 88h-42z"/></svg>
             </a>
-            <a href="mailto:hcsbhandbol@gmail.com" aria-label="Email">
+            <a href="mailto:baybnaditsbh@gmail.com" aria-label="Email">
               <svg viewBox="0 0 512 512" fill="currentColor" width="18" height="18"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4l217.6 163.2c11.4 8.5 27 8.5 38.4 0l217.6-163.2C504.9 141.3 512 127.1 512 112c0-26.5-21.5-48-48-48H48zm-6.4 254.4C14.7 297.5 0 278 0 256V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V256c0-22-14.7-41.5-36.6-46.6L256 372.8 54.4 318.4z"/></svg>
             </a>
           </div>
