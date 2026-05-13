@@ -151,29 +151,34 @@
 
 .calendar-event__photo {
   position: absolute;
-  inset: -6%;
+  top: -10%;
+  left: -10%;
+  width: 120%;
+  height: 120%;
   background-size: cover;
   background-position: center;
-  animation: kenBurns 16s ease-in-out infinite alternate;
+  background-repeat: no-repeat;
+  transform-origin: center center;
+  animation: kenBurns 9s ease-in-out infinite alternate;
   filter: brightness(0.82) saturate(0.88);
-  transition: filter 0.45s ease;
+  transition: filter 0.4s ease;
   will-change: transform;
 }
 
 .calendar-event__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(8, 12, 24, 0.06) 0%, rgba(8, 12, 24, 0.68) 100%);
+  background: linear-gradient(180deg, rgba(8, 12, 24, 0.06) 0%, rgba(8, 12, 24, 0.72) 100%);
   pointer-events: none;
 }
 
 .calendar-event:hover .calendar-event__photo {
-  filter: brightness(0.9) saturate(1.14);
+  filter: brightness(0.95) saturate(1.2);
 }
 
 @keyframes kenBurns {
-  from { transform: scale(1) translate(0%, 0%); }
-  to   { transform: scale(1.1) translate(1.5%, -1.5%); }
+  from { transform: scale(1.0) translate(0%, 0%); }
+  to   { transform: scale(1.18) translate(2%, -2%); }
 }
 
 .calendar-event__city {
