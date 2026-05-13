@@ -110,6 +110,7 @@ function JerseySvg({ name, dorsal }) {
 
 function TeamsPage() {
   const navigate = useNavigate()
+  const scrollRef = useRef(null)
   const sectionRefs = useRef(new Map())
   const swipeStartRef = useRef(null)
   const [visibleSections, setVisibleSections] = useState(() => ({ [rosters[0].id]: true }))
@@ -166,7 +167,7 @@ function TeamsPage() {
       return
     }
 
-    if (event.target.closest('a, button, input, textarea, select, .teams-index, .teams-nav-panel, .teams-mobile-dock')) {
+    if (event.target.closest('a, button, input, textarea, select, .teams-header, .teams-selector')) {
       swipeStartRef.current = null
       return
     }
@@ -196,6 +197,7 @@ function TeamsPage() {
   }
 
   useEffect(() => {
+    const scrollRoot = scrollRef.current
     const observer = new IntersectionObserver(
       (entries) => {
         setVisibleSections((current) => {
@@ -216,6 +218,7 @@ function TeamsPage() {
         })
       },
       {
+        root: scrollRoot,
         rootMargin: '180px 0px',
         threshold: 0.12,
       },
@@ -237,8 +240,15 @@ function TeamsPage() {
 
     const updateParallax = () => {
       animationFrame = 0
+      const scrollRoot = scrollRef.current
+      if (!scrollRoot) {
+        return
+      }
+
       let nearestId = ''
       let nearestDistance = Number.POSITIVE_INFINITY
+      const rootRect = scrollRoot.getBoundingClientRect()
+      const rootCenter = rootRect.top + rootRect.height * 0.5
 
       setParallaxOffsets((current) => {
         let changed = false
@@ -253,7 +263,7 @@ function TeamsPage() {
 
           const sectionId = team.id
           const rect = node.getBoundingClientRect()
-          const distanceFromCenter = window.innerHeight * 0.5 - (rect.top + rect.height * 0.5)
+          const distanceFromCenter = rootCenter - (rect.top + rect.height * 0.5)
           const shift = Math.max(-48, Math.min(48, Number((distanceFromCenter * 0.12).toFixed(2))))
           const absDistance = Math.abs(distanceFromCenter)
 
@@ -284,11 +294,12 @@ function TeamsPage() {
     }
 
     scheduleParallaxUpdate()
-    window.addEventListener('scroll', scheduleParallaxUpdate, { passive: true })
+    const scrollRoot = scrollRef.current
+    scrollRoot?.addEventListener('scroll', scheduleParallaxUpdate, { passive: true })
     window.addEventListener('resize', scheduleParallaxUpdate)
 
     return () => {
-      window.removeEventListener('scroll', scheduleParallaxUpdate)
+      scrollRoot?.removeEventListener('scroll', scheduleParallaxUpdate)
       window.removeEventListener('resize', scheduleParallaxUpdate)
 
       if (animationFrame) {
@@ -323,7 +334,11 @@ function TeamsPage() {
       <div className="teams-page__overlay" />
       <div className="teams-page__transition" />
 
-      <header className="teams-hero">
+      <header className="teams-header">
+        <button type="button" className="teams-back" onClick={handleGoBack}>
+          volver
+        </button>
+        <h1 className="teams-title">Nuestros Equipos</h1>
         <img
           src={LogoBB}
           alt="baybandits"
@@ -333,92 +348,42 @@ function TeamsPage() {
             event.currentTarget.src = LOGO_FALLBACK
           }}
         />
-        <p className="teams-kicker">Plantillas 2026</p>
-        <h1 className="teams-title">Nuestros Equipos</h1>
       </header>
 
-      <section className="teams-nav-panel" aria-label="Selector de equipos">
-        <div className="teams-nav-panel__header">
-          <button type="button" className="teams-back teams-back--desktop" onClick={handleGoBack}>
-            volver
-          </button>
-          <div className="teams-nav-panel__copy">
-            <p className="teams-nav-panel__eyebrow">Navegacion rapida</p>
-            <p className="teams-nav-panel__title">Selecciona un equipo de la lista</p>
-          </div>
-          <div className="teams-nav-panel__stepper" aria-label="Mover entre equipos">
+      <div className="teams-scroll" ref={scrollRef}>
+        <section className="teams-selector" aria-label="Selector de equipos">
+          <label className="teams-selector__label" htmlFor="teams-select">Selecciona equipo</label>
+          <div className="teams-selector__controls">
             <button
               type="button"
-              className="teams-stepper__button"
+              className="teams-selector__step"
               onClick={handlePrevTeam}
               disabled={activeTeamIndex <= 0}
             >
               anterior
             </button>
+            <select
+              id="teams-select"
+              className="teams-selector__select"
+              value={activeTeamId}
+              onChange={(event) => scrollToTeam(event.target.value)}
+            >
+              {rosters.map((team) => (
+                <option key={team.id} value={team.id}>{team.name}</option>
+              ))}
+            </select>
             <button
               type="button"
-              className="teams-stepper__button"
+              className="teams-selector__step"
               onClick={handleNextTeam}
               disabled={activeTeamIndex === -1 || activeTeamIndex >= rosters.length - 1}
             >
               siguiente
             </button>
           </div>
-        </div>
+        </section>
 
-        <nav className="teams-index" aria-label="Indice de equipos">
-          {rosters.map((team) => (
-            <button
-              key={team.id}
-              type="button"
-              className={`teams-index__item ${activeTeamId === team.id ? 'is-active' : ''}`}
-              aria-pressed={activeTeamId === team.id}
-              onClick={() => scrollToTeam(team.id)}
-            >
-              {team.name}
-            </button>
-          ))}
-        </nav>
-      </section>
-
-      <div className="teams-mobile-dock" aria-label="Acciones rapidas de equipos">
-        <button type="button" className="teams-mobile-dock__back" onClick={handleGoBack}>
-          volver
-        </button>
-        <div className="teams-mobile-dock__picker">
-          <label className="teams-mobile-dock__label" htmlFor="teams-mobile-select">equipo</label>
-          <select
-            id="teams-mobile-select"
-            className="teams-mobile-dock__select"
-            value={activeTeamId}
-            onChange={(event) => scrollToTeam(event.target.value)}
-          >
-            {rosters.map((team) => (
-              <option key={team.id} value={team.id}>{team.name}</option>
-            ))}
-          </select>
-        </div>
-        <div className="teams-mobile-dock__stepper" aria-label="Mover entre equipos">
-          <button
-            type="button"
-            className="teams-mobile-dock__step"
-            onClick={handlePrevTeam}
-            disabled={activeTeamIndex <= 0}
-          >
-            prev
-          </button>
-          <button
-            type="button"
-            className="teams-mobile-dock__step"
-            onClick={handleNextTeam}
-            disabled={activeTeamIndex === -1 || activeTeamIndex >= rosters.length - 1}
-          >
-            next
-          </button>
-        </div>
-      </div>
-
-      <main className="teams-content">
+        <main className="teams-content">
         {rosters.map((team, teamIndex) => (
           (() => {
             const theme = getTeamTheme(team.id)
@@ -467,7 +432,8 @@ function TeamsPage() {
             )
           })()
         ))}
-      </main>
+        </main>
+      </div>
     </div>
   )
 }
