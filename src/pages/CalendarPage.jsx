@@ -162,7 +162,7 @@ function CalendarPage() {
 
       const rootRect = scrollRoot.getBoundingClientRect()
       const rootCenter = rootRect.top + rootRect.height * 0.5
-      const nextBackgroundShift = Math.max(-36, Math.min(36, Number((scrollRoot.scrollTop * -0.12).toFixed(2))))
+      const nextBackgroundShift = Math.max(-64, Math.min(64, Number((scrollRoot.scrollTop * -0.22).toFixed(2))))
 
       setBackgroundShift((current) => (current === nextBackgroundShift ? current : nextBackgroundShift))
 
@@ -179,7 +179,7 @@ function CalendarPage() {
 
           const rect = node.getBoundingClientRect()
           const distanceFromCenter = rootCenter - (rect.top + rect.height * 0.5)
-          const shift = Math.max(-40, Math.min(40, Number((distanceFromCenter * 0.12).toFixed(2))))
+          const shift = Math.max(-64, Math.min(64, Number((distanceFromCenter * 0.18).toFixed(2))))
 
           next[circuit.id] = shift
 
@@ -274,11 +274,14 @@ function CalendarPage() {
               </div>
 
               <ol className="calendar-events" aria-label={circuit.title}>
-                {circuit.events.map((event) => (
+                {circuit.events.map((event, eventIndex) => (
                   <li key={`${circuit.id}-${event.dates}-${event.name}`} className="calendar-event">
                     <div
                       className="calendar-event__media"
-                      style={{ backgroundImage: `linear-gradient(180deg, rgba(8, 12, 24, 0.12), rgba(8, 12, 24, 0.68)), url(${event.image})` }}
+                      style={{
+                        '--calendar-event-image': `url(${event.image})`,
+                        '--calendar-event-shift': `${((parallaxOffsets[circuit.id] ?? 0) * (eventIndex % 2 === 0 ? 1.45 : -1.15)).toFixed(2)}px`,
+                      }}
                     >
                       <span className="calendar-event__city">{event.location}</span>
                     </div>

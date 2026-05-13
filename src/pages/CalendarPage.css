@@ -3,6 +3,7 @@
 .calendar-page .teams-page__bg {
   filter: grayscale(0.58) saturate(0.92);
   transition: transform 0.18s linear;
+  will-change: transform;
 }
 
 .calendar-content {
@@ -39,6 +40,7 @@
 .calendar-block::before {
   transform: translateY(var(--calendar-parallax-shift, 0px)) scale(1.05);
   transition: transform 0.18s linear, opacity 0.3s ease;
+  will-change: transform;
 }
 
 .calendar-kicker,
@@ -136,20 +138,72 @@
   border: 1px solid color-mix(in srgb, var(--calendar-accent) 28%, rgba(246, 248, 255, 0.12));
   background: linear-gradient(160deg, color-mix(in srgb, var(--calendar-accent) 18%, rgba(10, 16, 34, 0.88)) 0%, rgba(10, 16, 34, 0.88) 100%);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+}
+
+.calendar-event:hover,
+.calendar-event:focus-within {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--calendar-accent) 52%, rgba(246, 248, 255, 0.22));
+  box-shadow: 0 18px 34px rgba(5, 10, 22, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .calendar-event__media {
   position: relative;
+  isolation: isolate;
   min-height: 170px;
   display: flex;
   align-items: flex-end;
   padding: 16px;
-  background-position: center;
+  background: rgba(8, 12, 24, 0.16);
+}
+
+.calendar-event__media::before,
+.calendar-event__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.calendar-event__media::before {
+  inset: -8%;
+  z-index: -2;
+  background-image: var(--calendar-event-image);
+  background-position: center calc(50% + var(--calendar-event-shift, 0px));
   background-repeat: no-repeat;
   background-size: cover;
+  transform: scale(1.04);
+  filter: saturate(0.98) contrast(1.02);
+  transition: transform 0.5s ease, filter 0.5s ease, background-position 0.18s linear;
+  will-change: transform, filter, background-position;
+}
+
+.calendar-event__media::after {
+  z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(8, 12, 24, 0.18), rgba(8, 12, 24, 0.72)),
+    linear-gradient(120deg, rgba(255, 255, 255, 0) 16%, rgba(255, 255, 255, 0.2) 48%, rgba(255, 255, 255, 0) 76%);
+  transform: translateX(-16%);
+  opacity: 0.88;
+  transition: transform 0.55s ease, opacity 0.35s ease;
+}
+
+.calendar-event:hover .calendar-event__media::before,
+.calendar-event:focus-within .calendar-event__media::before {
+  transform: scale(1.12);
+  filter: saturate(1.08) contrast(1.06);
+}
+
+.calendar-event:hover .calendar-event__media::after,
+.calendar-event:focus-within .calendar-event__media::after {
+  transform: translateX(8%);
+  opacity: 1;
 }
 
 .calendar-event__city {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -165,6 +219,14 @@
   color: #f6f8ff;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  transition: transform 0.28s ease, background 0.28s ease, border-color 0.28s ease;
+}
+
+.calendar-event:hover .calendar-event__city,
+.calendar-event:focus-within .calendar-event__city {
+  transform: translateY(-2px);
+  background: rgba(8, 12, 24, 0.78);
+  border-color: rgba(246, 248, 255, 0.3);
 }
 
 .calendar-event__body {

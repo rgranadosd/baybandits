@@ -13,6 +13,15 @@ import LogoBB  from './assets/logos/baybandits.png'
 const VIDEO_MP4  = `${import.meta.env.BASE_URL}videos/bandits-wb-fast.mp4`
 const VIDEO_POSTER = `${import.meta.env.BASE_URL}videos/bandits-wb-poster.jpg`
 
+const sponsorLinks = {
+  daunert: 'https://www.daunert.com/',
+  logokeynetsystems2025: 'https://keynet-systems.com/',
+  rosinach: 'https://www.grupdentar.com/clinica-dental-rosinach-sant-boi-de-llobregat/',
+  copyflash: 'https://copiflash.cat/',
+  santos: 'https://marisqueriasantos.com',
+  tallerleonardodavinci: 'https://www.talleresleonardodavinci.es/',
+}
+
 const sponsorLogos = Object.entries(
   import.meta.glob('./assets/partners/*.{png,jpg,jpeg,svg,PNG,JPG,JPEG,SVG}', {
     eager: true,
@@ -22,9 +31,12 @@ const sponsorLogos = Object.entries(
   .sort(([a], [b]) => a.localeCompare(b))
   .map(([path, src]) => {
     const fileName = path.split('/').pop()?.replace(/\.[^/.]+$/, '') || 'Patrocinador'
+    const slug = fileName.toLowerCase().replace(/[^a-z0-9]+/g, '')
+
     return {
       src,
       alt: fileName.replace(/[_-]+/g, ' ').trim(),
+      href: sponsorLinks[slug] || null,
     }
   })
 
@@ -272,9 +284,22 @@ function App() {
           <p className="sponsors-lead">{t.sponsorsLead}</p>
           <div className="sponsors-grid" aria-label={t.sponsors}>
             {sponsorLogos.map((logo) => (
-              <article className="sponsor-card" key={logo.src}>
-                <img src={logo.src} alt={logo.alt} loading="lazy" />
-              </article>
+              logo.href ? (
+                <a
+                  className="sponsor-card sponsor-card--link"
+                  key={logo.src}
+                  href={logo.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`${logo.alt} - abrir en una pestaña nueva`}
+                >
+                  <img src={logo.src} alt={logo.alt} loading="lazy" />
+                </a>
+              ) : (
+                <article className="sponsor-card" key={logo.src}>
+                  <img src={logo.src} alt={logo.alt} loading="lazy" />
+                </article>
+              )
             ))}
           </div>
         </div>
