@@ -362,7 +362,7 @@
 .calendar-event-card__meta {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 8px;
 }
 
@@ -372,40 +372,6 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   font-weight: 700;
-}
-
-.calendar-event-card__status {
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  font-weight: 800;
-  border-radius: 999px;
-  padding: 6px 9px;
-  border: 1px solid transparent;
-}
-
-.calendar-event-card__status--confirmado {
-  color: #b9f3d0;
-  background: rgba(22, 115, 69, 0.38);
-  border-color: rgba(126, 236, 180, 0.34);
-}
-
-.calendar-event-card__status--abierto {
-  color: #c8edff;
-  background: rgba(24, 94, 142, 0.4);
-  border-color: rgba(108, 202, 255, 0.36);
-}
-
-.calendar-event-card__status--proximamente {
-  color: #ffe8bc;
-  background: rgba(133, 89, 18, 0.42);
-  border-color: rgba(255, 198, 99, 0.38);
-}
-
-.calendar-event-card__status--cerrado {
-  color: #ffcece;
-  background: rgba(122, 33, 33, 0.42);
-  border-color: rgba(255, 143, 143, 0.34);
 }
 
 .calendar-event-card h3 {

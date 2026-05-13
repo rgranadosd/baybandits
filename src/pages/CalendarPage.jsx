@@ -15,13 +15,6 @@ const LOGO_FALLBACK = `${import.meta.env.BASE_URL}logos/ESCUDO%20BAY%20BANDITS%2
 const EDGE_BACK_ZONE = 36
 const BACK_SWIPE_MIN_DISTANCE = 72
 
-const eventStates = {
-  confirmado: { label: 'Confirmado', tone: 'confirmado' },
-  abierto: { label: 'Inscripción abierta', tone: 'abierto' },
-  proximamente: { label: 'Próximamente', tone: 'proximamente' },
-  cerrado: { label: 'Cerrado', tone: 'cerrado' },
-}
-
 const circuits = [
   {
     id: 'nacional',
@@ -36,14 +29,12 @@ const circuits = [
         name: 'Arena 1000 Vilanova i la Geltrú',
         location: 'Vilanova i la Geltrú',
         image: VilanovaCity,
-        status: 'confirmado',
       },
       {
         dates: '30 julio - 2 agosto',
         name: 'Campeonato de España Laredo',
         location: 'Laredo',
         image: LaredoCity,
-        status: 'abierto',
       },
     ],
   },
@@ -60,35 +51,30 @@ const circuits = [
         name: 'OAR Gràcia Sabadell',
         location: 'Sabadell',
         image: SabadellCity,
-        status: 'confirmado',
       },
       {
         dates: '20-21 junio',
         name: 'Gavà',
         location: 'Gavà',
         image: GavaCity,
-        status: 'abierto',
       },
       {
         dates: '4-5 julio',
         name: 'Estartit',
         location: 'Estartit',
         image: EstartitCity,
-        status: 'proximamente',
       },
       {
         dates: '11-12 julio',
         name: 'Malgrat de Mar',
         location: 'Malgrat de Mar',
         image: MalgratCity,
-        status: 'proximamente',
       },
       {
         dates: '18-19 julio',
         name: 'Mataró',
         location: 'Mataró',
         image: MataroCity,
-        status: 'cerrado',
       },
     ],
   },
@@ -100,15 +86,11 @@ function CalendarPage() {
 
   const stats = useMemo(() => {
     const totalEvents = circuits.reduce((acc, circuit) => acc + circuit.events.length, 0)
-    const openEvents = circuits.reduce(
-      (acc, circuit) => acc + circuit.events.filter((event) => event.status === 'abierto').length,
-      0,
-    )
 
     return {
       circuits: circuits.length,
       totalEvents,
-      openEvents,
+      venues: totalEvents,
     }
   }, [])
 
@@ -207,8 +189,7 @@ function CalendarPage() {
           <p className="calendar-hero__kicker">Bay Bandits Beach Handball</p>
           <h1>Calendario Oficial 2026</h1>
           <p className="calendar-hero__lead">
-            Agenda competitiva de la temporada con sedes confirmadas, estado de inscripción y lectura clara por
-            circuito.
+            Agenda competitiva de la temporada con sedes confirmadas y lectura clara por circuito.
           </p>
 
           <dl className="calendar-hero__stats">
@@ -221,8 +202,8 @@ function CalendarPage() {
               <dd>{stats.totalEvents}</dd>
             </div>
             <div>
-              <dt>Abiertas</dt>
-              <dd>{stats.openEvents}</dd>
+              <dt>Sedes</dt>
+              <dd>{stats.venues}</dd>
             </div>
             <div>
               <dt>Temporada</dt>
@@ -248,31 +229,25 @@ function CalendarPage() {
               </header>
 
               <ol className="calendar-event-grid" aria-label={circuit.title}>
-                {circuit.events.map((event, eventIndex) => {
-                  const eventState = eventStates[event.status] || eventStates.confirmado
-                  return (
-                    <li
-                      key={`${circuit.id}-${event.dates}-${event.name}`}
-                      className="calendar-event-card"
-                      style={{ '--event-order': eventIndex }}
-                    >
-                      <figure className="calendar-event-card__media">
-                        <img src={event.image} alt={`Sede ${event.location}`} loading="lazy" />
-                        <figcaption>{event.location}</figcaption>
-                      </figure>
+                {circuit.events.map((event, eventIndex) => (
+                  <li
+                    key={`${circuit.id}-${event.dates}-${event.name}`}
+                    className="calendar-event-card"
+                    style={{ '--event-order': eventIndex }}
+                  >
+                    <figure className="calendar-event-card__media">
+                      <img src={event.image} alt={`Sede ${event.location}`} loading="lazy" />
+                      <figcaption>{event.location}</figcaption>
+                    </figure>
 
-                      <div className="calendar-event-card__body">
-                        <div className="calendar-event-card__meta">
-                          <span className="calendar-event-card__dates">{event.dates}</span>
-                          <span className={`calendar-event-card__status calendar-event-card__status--${eventState.tone}`}>
-                            {eventState.label}
-                          </span>
-                        </div>
-                        <h3>{event.name}</h3>
+                    <div className="calendar-event-card__body">
+                      <div className="calendar-event-card__meta">
+                        <span className="calendar-event-card__dates">{event.dates}</span>
                       </div>
-                    </li>
-                  )
-                })}
+                      <h3>{event.name}</h3>
+                    </div>
+                  </li>
+                ))}
               </ol>
             </section>
           ))}
