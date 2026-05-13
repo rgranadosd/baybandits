@@ -19,7 +19,7 @@ const circuits = [
   {
     id: 'nacional',
     title: 'Circuito Nacional',
-    summary: 'Paradas clave del circuito estatal con presencia de los principales equipos nacionales.',
+    summary: '',
     region: 'España',
     accent: '#2aa8ff',
     accentSoft: 'rgba(42, 168, 255, 0.24)',
@@ -218,7 +218,7 @@ function CalendarPage() {
                   <h2>{circuit.title}</h2>
                   <span>{circuit.events.length} pruebas</span>
                 </div>
-                <p className="calendar-circuit__summary">{circuit.summary}</p>
+                {circuit.summary ? <p className="calendar-circuit__summary">{circuit.summary}</p> : null}
               </header>
 
               <ol className="calendar-event-grid" aria-label={circuit.title}>

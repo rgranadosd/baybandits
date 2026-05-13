@@ -22,6 +22,17 @@ const sponsorLinks = {
   tallerleonardodavinci: 'https://www.talleresleonardodavinci.es/',
 }
 
+const sponsorOrder = [
+  'logokeynetsystems2025',
+  'rosinach',
+  'daunert',
+  'copyflash',
+  'santos',
+  'barelparque',
+  'frankfurtramos',
+  'tallerleonardodavinci',
+]
+
 const sponsorLogos = Object.entries(
   import.meta.glob('./assets/partners/*.{png,jpg,jpeg,svg,PNG,JPG,JPEG,SVG}', {
     eager: true,
@@ -36,8 +47,21 @@ const sponsorLogos = Object.entries(
     return {
       src,
       alt: fileName.replace(/[_-]+/g, ' ').trim(),
+      slug,
       href: sponsorLinks[slug] || null,
     }
+  })
+  .sort((a, b) => {
+    const aIndex = sponsorOrder.indexOf(a.slug)
+    const bIndex = sponsorOrder.indexOf(b.slug)
+    const aRank = aIndex === -1 ? Number.MAX_SAFE_INTEGER : aIndex
+    const bRank = bIndex === -1 ? Number.MAX_SAFE_INTEGER : bIndex
+
+    if (aRank !== bRank) {
+      return aRank - bRank
+    }
+
+    return a.alt.localeCompare(b.alt)
   })
 
 /* ── Traduccions ── */

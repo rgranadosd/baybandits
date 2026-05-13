@@ -386,42 +386,27 @@
   padding: 14px;
   position: relative;
   overflow: hidden;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform;
 }
 
 .sponsor-card--link {
   text-decoration: none;
-  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, filter 0.22s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, filter 0.3s ease;
 }
 
 .sponsor-card--link:hover,
 .sponsor-card--link:focus-visible {
-  transform: translateY(-6px) scale(1.02);
+  transform: translateY(-3px) scale(1.01);
   border-color: rgba(255, 78, 163, 0.6);
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.26), 0 0 24px rgba(42, 168, 255, 0.28);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.24), 0 0 18px rgba(42, 168, 255, 0.2);
   filter: saturate(1.08);
 }
 
 .sponsors-wrap.anim-in.visible .sponsor-card {
-  animation:
-    sponsorPop 0.55s cubic-bezier(0.21, 0.98, 0.31, 1) both,
-    sponsorFloat 4.8s ease-in-out calc(var(--sponsor-delay) + 0.55s) infinite;
-  animation-delay: var(--sponsor-delay), calc(var(--sponsor-delay) + 0.55s);
-}
-
-.sponsor-card::after {
-  content: '';
-  position: absolute;
-  inset: -55% auto -55% -42%;
-  width: 42%;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0));
-  transform: rotate(14deg) translateX(-160%);
-  opacity: 0;
-  pointer-events: none;
-}
-
-.sponsor-card--link:hover::after,
-.sponsor-card--link:focus-visible::after {
-  animation: sponsorShine 0.75s ease-out;
+  animation: sponsorPop 0.46s cubic-bezier(0.22, 0.9, 0.33, 1) both;
+  animation-delay: var(--sponsor-delay);
 }
 
 .sponsor-card img {
@@ -430,34 +415,24 @@
   object-fit: contain;
   object-position: center;
   filter: contrast(1.05) saturate(1.02);
+  transform: translateZ(0);
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.sponsor-card--link:hover img,
+.sponsor-card--link:focus-visible img {
+  filter: contrast(1.08) saturate(1.08);
+  transform: scale(1.015);
 }
 
 @keyframes sponsorPop {
   from {
     opacity: 0;
-    transform: translateY(16px) scale(0.94);
+    transform: translateY(10px) scale(0.985);
   }
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes sponsorFloat {
-  0%,
-  100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
-}
-
-@keyframes sponsorShine {
-  0% {
-    opacity: 0;
-    transform: rotate(14deg) translateX(-160%);
-  }
-  15% { opacity: 1; }
-  100% {
-    opacity: 0;
-    transform: rotate(14deg) translateX(360%);
   }
 }
 
