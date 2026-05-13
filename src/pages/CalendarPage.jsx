@@ -23,7 +23,6 @@ const circuits = [
     eyebrow: 'España',
     accent: '#2aa8ff',
     accentSoft: 'rgba(42, 168, 255, 0.24)',
-    flag: 'spain',
     events: [
       {
         dates: '12-14 junio',
@@ -46,7 +45,6 @@ const circuits = [
     eyebrow: 'Cataluña',
     accent: '#ff4ea3',
     accentSoft: 'rgba(255, 78, 163, 0.24)',
-    flag: 'catalonia',
     events: [
       {
         dates: '6-7 junio',
@@ -80,16 +78,7 @@ const circuits = [
       },
     ],
   },
-]
-
-function FlagBadge({ type, label }) {
-  return (
-    <span className={`calendar-flag calendar-flag--${type}`} aria-label={label} title={label}>
-      <span className="calendar-flag__pole" aria-hidden="true" />
-      <span className="calendar-flag__cloth" aria-hidden="true" />
-    </span>
-  )
-}
+] 
 
 function CalendarPage() {
   const navigate = useNavigate()
@@ -278,7 +267,6 @@ function CalendarPage() {
             >
               <div className="calendar-block__header">
                 <div className="calendar-block__title-wrap">
-                  <FlagBadge type={circuit.flag} label={circuit.title} />
                   <p className="calendar-block__eyebrow">{circuit.eyebrow}</p>
                   <h2>{circuit.title}</h2>
                 </div>

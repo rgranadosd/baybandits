@@ -99,63 +99,14 @@
 }
 
 .calendar-block__title-wrap {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-areas:
-    'flag eyebrow'
-    'flag title';
-  column-gap: 14px;
-  row-gap: 2px;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-start;
 }
 
 .calendar-block__title-wrap .calendar-block__eyebrow {
-  grid-area: eyebrow;
   margin-bottom: 0;
-}
-
-.calendar-block__title-wrap h2 {
-  grid-area: title;
-}
-
-.calendar-flag {
-  grid-area: flag;
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 56px;
-  height: 56px;
-}
-
-.calendar-flag__pole {
-  position: absolute;
-  left: 10px;
-  top: 5px;
-  bottom: 5px;
-  width: 4px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, rgba(246, 248, 255, 0.92), rgba(160, 172, 198, 0.74));
-  box-shadow: 0 0 0 1px rgba(5, 10, 22, 0.24);
-}
-
-.calendar-flag__cloth {
-  position: absolute;
-  left: 14px;
-  top: 10px;
-  width: 34px;
-  height: 23px;
-  border-radius: 0 6px 6px 0;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
-  transform-origin: left center;
-}
-
-.calendar-flag--spain .calendar-flag__cloth {
-  background: linear-gradient(180deg, #c9182b 0 28%, #f6c623 28% 72%, #c9182b 72% 100%);
-}
-
-.calendar-flag--catalonia .calendar-flag__cloth {
-  background: repeating-linear-gradient(180deg, #f6c623 0 14%, #cc2033 14% 28%);
 }
 
 .calendar-block__summary {
