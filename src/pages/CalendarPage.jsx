@@ -21,8 +21,8 @@ const circuits = [
     title: 'Circuito Nacional',
     summary: 'Paradas clave del circuito estatal con presencia de los principales equipos nacionales.',
     region: 'España',
-    accent: '#2ea6ff',
-    accentSoft: 'rgba(46, 166, 255, 0.24)',
+    accent: '#7aa7bf',
+    accentSoft: 'rgba(122, 167, 191, 0.24)',
     events: [
       {
         dates: '12-14 junio',
@@ -43,8 +43,8 @@ const circuits = [
     title: 'Circuito Catalán',
     summary: 'Calendario oficial del circuito catalán con cinco sedes y trazado competitivo continuo.',
     region: 'Cataluña',
-    accent: '#ff6f3d',
-    accentSoft: 'rgba(255, 111, 61, 0.24)',
+    accent: '#d88962',
+    accentSoft: 'rgba(216, 137, 98, 0.24)',
     events: [
       {
         dates: '6-7 junio',
@@ -187,7 +187,9 @@ function CalendarPage() {
       <main className="calendar-shell">
         <section className="calendar-hero" aria-label="Resumen calendario 2026">
           <p className="calendar-hero__kicker">Bay Bandits Beach Handball</p>
-          <h1>Calendario Oficial 2026</h1>
+          <h1>
+            Calendario Oficial <span className="calendar-hero__year">2026</span>
+          </h1>
           <p className="calendar-hero__lead">
             Agenda competitiva de la temporada con sedes confirmadas y lectura clara por circuito.
           </p>

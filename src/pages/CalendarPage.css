@@ -2,13 +2,14 @@
 
 :root {
   --calendar-bg: #0a121d;
-  --calendar-surface: rgba(10, 18, 30, 0.84);
-  --calendar-surface-strong: rgba(10, 18, 30, 0.94);
-  --calendar-border: rgba(224, 234, 255, 0.18);
-  --calendar-text: #f6f8fc;
-  --calendar-muted: rgba(221, 230, 248, 0.72);
-  --calendar-blue: #2ea6ff;
-  --calendar-orange: #ff6f3d;
+  --calendar-surface: rgba(10, 18, 30, 0.8);
+  --calendar-surface-strong: rgba(10, 18, 30, 0.92);
+  --calendar-border: rgba(224, 234, 255, 0.14);
+  --calendar-text: #f3f2ee;
+  --calendar-muted: rgba(201, 208, 222, 0.78);
+  --calendar-accent: #d88962;
+  --calendar-accent-soft: rgba(216, 137, 98, 0.2);
+  --calendar-accent-ink: #ffe6d6;
 }
 
 .calendar-premium {
@@ -26,7 +27,7 @@
   z-index: 0;
   background-size: cover;
   background-position: center;
-  filter: grayscale(0.42) saturate(0.74) contrast(0.92);
+  filter: grayscale(0.5) saturate(0.58) contrast(0.9);
   transform: scale(1.04);
 }
 
@@ -35,9 +36,9 @@
   inset: 0;
   z-index: 1;
   background:
-    linear-gradient(180deg, rgba(7, 12, 20, 0.72) 0%, rgba(7, 12, 20, 0.9) 78%),
-    radial-gradient(circle at 16% 14%, rgba(46, 166, 255, 0.11), transparent 38%),
-    radial-gradient(circle at 84% 10%, rgba(255, 111, 61, 0.1), transparent 42%);
+    linear-gradient(180deg, rgba(7, 12, 20, 0.62) 0%, rgba(7, 12, 20, 0.82) 78%),
+    radial-gradient(circle at 16% 14%, rgba(122, 167, 191, 0.08), transparent 38%),
+    radial-gradient(circle at 84% 10%, rgba(216, 137, 98, 0.1), transparent 42%);
 }
 
 .calendar-topbar {
@@ -49,7 +50,7 @@
   align-items: center;
   gap: 16px;
   padding: max(12px, env(safe-area-inset-top)) clamp(14px, 2vw, 28px) 12px;
-  border-bottom: 1px solid rgba(224, 234, 255, 0.12);
+  border-bottom: 1px solid rgba(224, 234, 255, 0.09);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   background: linear-gradient(180deg, rgba(8, 14, 24, 0.92), rgba(8, 14, 24, 0.72));
@@ -72,7 +73,7 @@
 
 .calendar-topbar__back:hover {
   transform: translateY(-1px);
-  border-color: rgba(46, 166, 255, 0.75);
+  border-color: rgba(216, 137, 98, 0.75);
   background: rgba(15, 24, 38, 1);
 }
 
@@ -101,12 +102,12 @@
 
 .calendar-topbar__nav a:hover {
   color: #f6f8fc;
-  background: rgba(46, 166, 255, 0.16);
+  background: rgba(216, 137, 98, 0.16);
 }
 
 .calendar-topbar__nav span {
   color: #f8fbff;
-  background: linear-gradient(120deg, rgba(46, 166, 255, 0.25), rgba(255, 111, 61, 0.23));
+  background: linear-gradient(120deg, rgba(122, 167, 191, 0.21), rgba(216, 137, 98, 0.23));
   border: 1px solid rgba(224, 234, 255, 0.22);
 }
 
@@ -137,15 +138,15 @@
   margin: 20px auto 42px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 30px;
 }
 
 .calendar-hero {
   border: 1px solid var(--calendar-border);
   border-radius: 20px;
-  background: linear-gradient(145deg, rgba(9, 16, 28, 0.82), rgba(12, 20, 32, 0.92));
+  background: linear-gradient(145deg, rgba(9, 16, 28, 0.78), rgba(12, 20, 32, 0.9));
   padding: clamp(20px, 3vw, 34px);
-  box-shadow: 0 16px 36px rgba(2, 6, 12, 0.38);
+  box-shadow: 0 14px 26px rgba(2, 6, 12, 0.28);
 }
 
 .calendar-hero__kicker {
@@ -163,7 +164,12 @@
   font-size: clamp(44px, 7vw, 76px);
   letter-spacing: 0.03em;
   line-height: 0.9;
-  color: #f4f8ff;
+  color: #f3f2ee;
+}
+
+.calendar-hero__year {
+  color: var(--calendar-accent);
+  text-shadow: 0 3px 18px rgba(216, 137, 98, 0.22);
 }
 
 .calendar-hero__lead {
@@ -183,10 +189,10 @@
 }
 
 .calendar-hero__stats div {
-  border: 1px solid rgba(224, 234, 255, 0.14);
+  border: 1px solid rgba(224, 234, 255, 0.11);
   border-radius: 14px;
   padding: 12px;
-  background: rgba(14, 22, 36, 0.78);
+  background: rgba(14, 22, 36, 0.7);
 }
 
 .calendar-hero__stats dt {
@@ -202,28 +208,32 @@
   margin: 6px 0 0;
   font-size: 28px;
   font-weight: 800;
-  color: #f7faff;
+  color: #f3f2ee;
   line-height: 1;
+}
+
+.calendar-hero__stats div:last-child dd {
+  color: var(--calendar-accent);
 }
 
 .calendar-circuits {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 26px;
 }
 
 .calendar-circuit {
   border-radius: 20px;
-  border: 1px solid rgba(224, 234, 255, 0.14);
+  border: 1px solid rgba(224, 234, 255, 0.11);
   background: var(--calendar-surface);
-  box-shadow: 0 16px 34px rgba(2, 6, 12, 0.32);
+  box-shadow: 0 12px 24px rgba(2, 6, 12, 0.24);
   overflow: hidden;
 }
 
 .calendar-circuit__header {
   position: relative;
   padding: 20px;
-  border-bottom: 1px solid rgba(224, 234, 255, 0.12);
+  border-bottom: 1px solid rgba(224, 234, 255, 0.08);
   background: linear-gradient(130deg, color-mix(in srgb, var(--circuit-accent) 20%, rgba(10, 18, 30, 0.95)) 0%, rgba(10, 18, 30, 0.9) 76%);
 }
 
@@ -290,16 +300,16 @@
   padding: 18px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 16px;
+  gap: 18px;
 }
 
 .calendar-event-card {
   --event-order: 0;
-  border: 1px solid rgba(224, 234, 255, 0.14);
+  border: 1px solid rgba(224, 234, 255, 0.11);
   border-radius: 16px;
   overflow: hidden;
   background: var(--calendar-surface-strong);
-  box-shadow: 0 12px 22px rgba(2, 6, 12, 0.3);
+  box-shadow: 0 10px 18px rgba(2, 6, 12, 0.24);
   transform: translateY(12px);
   opacity: 0;
   animation: eventCardEnter 0.52s ease forwards;
@@ -309,8 +319,8 @@
 
 .calendar-event-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(224, 234, 255, 0.28);
-  box-shadow: 0 18px 32px rgba(2, 6, 12, 0.42);
+  border-color: rgba(216, 137, 98, 0.34);
+  box-shadow: 0 16px 26px rgba(2, 6, 12, 0.34);
 }
 
 .calendar-event-card__media {
@@ -357,6 +367,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  border-top: 1px solid rgba(224, 234, 255, 0.08);
 }
 
 .calendar-event-card__meta {
@@ -367,11 +378,18 @@
 }
 
 .calendar-event-card__dates {
-  color: rgba(246, 248, 252, 0.86);
-  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  color: var(--calendar-accent-ink);
+  font-size: 10.5px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   font-weight: 700;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(216, 137, 98, 0.42);
+  background: linear-gradient(140deg, rgba(216, 137, 98, 0.28), rgba(179, 112, 82, 0.16));
+  box-shadow: inset 0 1px 0 rgba(255, 233, 218, 0.2);
 }
 
 .calendar-event-card h3 {
