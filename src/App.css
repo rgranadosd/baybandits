@@ -374,6 +374,7 @@
 }
 
 .sponsor-card {
+  --sponsor-delay: 0ms;
   height: clamp(96px, 9.5vw, 126px);
   border: 1px solid rgba(42, 168, 255, 0.45);
   border-radius: 14px;
@@ -383,18 +384,44 @@
   align-items: center;
   justify-content: center;
   padding: 14px;
+  position: relative;
+  overflow: hidden;
 }
 
 .sponsor-card--link {
   text-decoration: none;
-  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, filter 0.22s ease;
 }
 
 .sponsor-card--link:hover,
 .sponsor-card--link:focus-visible {
-  transform: translateY(-3px);
+  transform: translateY(-6px) scale(1.02);
   border-color: rgba(255, 78, 163, 0.6);
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.26);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.26), 0 0 24px rgba(42, 168, 255, 0.28);
+  filter: saturate(1.08);
+}
+
+.sponsors-wrap.anim-in.visible .sponsor-card {
+  animation:
+    sponsorPop 0.55s cubic-bezier(0.21, 0.98, 0.31, 1) both,
+    sponsorFloat 4.8s ease-in-out calc(var(--sponsor-delay) + 0.55s) infinite;
+  animation-delay: var(--sponsor-delay), calc(var(--sponsor-delay) + 0.55s);
+}
+
+.sponsor-card::after {
+  content: '';
+  position: absolute;
+  inset: -55% auto -55% -42%;
+  width: 42%;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0));
+  transform: rotate(14deg) translateX(-160%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sponsor-card--link:hover::after,
+.sponsor-card--link:focus-visible::after {
+  animation: sponsorShine 0.75s ease-out;
 }
 
 .sponsor-card img {
@@ -403,6 +430,35 @@
   object-fit: contain;
   object-position: center;
   filter: contrast(1.05) saturate(1.02);
+}
+
+@keyframes sponsorPop {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes sponsorFloat {
+  0%,
+  100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes sponsorShine {
+  0% {
+    opacity: 0;
+    transform: rotate(14deg) translateX(-160%);
+  }
+  15% { opacity: 1; }
+  100% {
+    opacity: 0;
+    transform: rotate(14deg) translateX(360%);
+  }
 }
 
 /* ═══ SECTION 5 — Footer / Contact ═══ */

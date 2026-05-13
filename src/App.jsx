@@ -283,7 +283,7 @@ function App() {
           <h3 className="sponsors-title">{t.sponsors}</h3>
           <p className="sponsors-lead">{t.sponsorsLead}</p>
           <div className="sponsors-grid" aria-label={t.sponsors}>
-            {sponsorLogos.map((logo) => (
+            {sponsorLogos.map((logo, index) => (
               logo.href ? (
                 <a
                   className="sponsor-card sponsor-card--link"
@@ -291,12 +291,13 @@ function App() {
                   href={logo.href}
                   target="_blank"
                   rel="noreferrer"
+                  style={{ '--sponsor-delay': `${index * 90}ms` }}
                   aria-label={`${logo.alt} - abrir en una pestaña nueva`}
                 >
                   <img src={logo.src} alt={logo.alt} loading="lazy" />
                 </a>
               ) : (
-                <article className="sponsor-card" key={logo.src}>
+                <article className="sponsor-card" key={logo.src} style={{ '--sponsor-delay': `${index * 90}ms` }}>
                   <img src={logo.src} alt={logo.alt} loading="lazy" />
                 </article>
               )
