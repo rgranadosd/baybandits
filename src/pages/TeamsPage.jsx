@@ -111,11 +111,21 @@ function JerseySvg({ name, dorsal }) {
 
 function TeamsPage() {
   const navigate = useNavigate()
-  const scrollRef = useRef(null)
   const sectionRefs = useRef(new Map())
   const swipeStartRef = useRef(null)
   const [visibleSections, setVisibleSections] = useState(() => ({ [rosters[0].id]: true }))
   const [parallaxOffsets, setParallaxOffsets] = useState({})
+
+  const stats = useMemo(() => {
+    const totalPlayers = rosters.reduce((acc, team) => acc + team.players.length, 0)
+
+    return {
+      teams: rosters.length,
+      players: totalPlayers,
+      coaches: rosters.length,
+      season: 2026,
+    }
+  }, [])
 
   const handleGoBack = useCallback(() => {
     if (window.history.length > 1) {
@@ -168,7 +178,6 @@ function TeamsPage() {
   }
 
   useEffect(() => {
-    const scrollRoot = scrollRef.current
     const observer = new IntersectionObserver(
       (entries) => {
         setVisibleSections((current) => {
@@ -189,7 +198,6 @@ function TeamsPage() {
         })
       },
       {
-        root: scrollRoot,
         rootMargin: '180px 0px',
         threshold: 0.12,
       },
@@ -211,13 +219,7 @@ function TeamsPage() {
 
     const updateParallax = () => {
       animationFrame = 0
-      const scrollRoot = scrollRef.current
-      if (!scrollRoot) {
-        return
-      }
-
-      const rootRect = scrollRoot.getBoundingClientRect()
-      const rootCenter = rootRect.top + rootRect.height * 0.5
+      const rootCenter = window.innerHeight * 0.5
 
       setParallaxOffsets((current) => {
         let changed = false
@@ -253,12 +255,11 @@ function TeamsPage() {
     }
 
     scheduleParallaxUpdate()
-    const scrollRoot = scrollRef.current
-    scrollRoot?.addEventListener('scroll', scheduleParallaxUpdate, { passive: true })
+    window.addEventListener('scroll', scheduleParallaxUpdate, { passive: true })
     window.addEventListener('resize', scheduleParallaxUpdate)
 
     return () => {
-      scrollRoot?.removeEventListener('scroll', scheduleParallaxUpdate)
+      window.removeEventListener('scroll', scheduleParallaxUpdate)
       window.removeEventListener('resize', scheduleParallaxUpdate)
 
       if (animationFrame) {
@@ -297,7 +298,9 @@ function TeamsPage() {
         <button type="button" className="teams-back" onClick={handleGoBack}>
           volver
         </button>
-        <h1 className="teams-title">Nuestros Equipos</h1>
+
+        <span className="teams-header-spacer" aria-hidden="true" />
+
         <button className="teams-logo-btn" onClick={() => navigate('/')} aria-label="Ir a la home">
           <img
             src={LogoBB}
@@ -311,8 +314,34 @@ function TeamsPage() {
         </button>
       </header>
 
-      <div className="teams-scroll" ref={scrollRef}>
-        <main className="teams-content">
+      <main className="teams-shell">
+        <section className="teams-hero" aria-label="Resumen equipos 2026">
+          <p className="teams-hero__kicker">Bay Bandits Beach Handball</p>
+          <h1>
+            Nuestros Equipos <span className="teams-hero__year">2026</span>
+          </h1>
+
+          <dl className="teams-hero__stats">
+            <div>
+              <dt>Equipos</dt>
+              <dd>{stats.teams}</dd>
+            </div>
+            <div>
+              <dt>Jugadores</dt>
+              <dd>{stats.players}</dd>
+            </div>
+            <div>
+              <dt>Entrenadores</dt>
+              <dd>{stats.coaches}</dd>
+            </div>
+            <div>
+              <dt>Temporada</dt>
+              <dd>{stats.season}</dd>
+            </div>
+          </dl>
+        </section>
+
+        <div className="teams-content">
         {rosters.map((team, teamIndex) => (
           (() => {
             const theme = getTeamTheme(team.id)
@@ -361,10 +390,10 @@ function TeamsPage() {
             )
           })()
         ))}
-        </main>
+        </div>
 
-        <LandingFooter className="teams-scroll__footer" />
-      </div>
+        <LandingFooter className="teams-shell__footer" />
+      </main>
     </div>
   )
 }
