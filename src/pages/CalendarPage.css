@@ -110,6 +110,11 @@
   gap: 26px;
 }
 
+.calendar-shell__footer {
+  margin-top: 2px;
+  margin-bottom: 8px;
+}
+
 .calendar-hero {
   border: 1px solid var(--calendar-border);
   border-radius: 20px;
@@ -421,6 +426,10 @@
 
   .calendar-event-card__body {
     padding: 12px;
+  }
+
+  .calendar-shell__footer {
+    margin-bottom: 4px;
   }
 }
 

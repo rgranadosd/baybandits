@@ -4,6 +4,7 @@ import './TeamsPage.css'
 import { rosters } from '../data/rosters.js'
 import Photo7 from '../assets/photos/Photo7.jpeg'
 import LogoBB from '../assets/logos/baybandits.png'
+import LandingFooter from '../components/LandingFooter'
 
 const LOGO_FALLBACK = `${import.meta.env.BASE_URL}logos/ESCUDO%20BAY%20BANDITS%202026.PNG`
 const SHIRT_PATH = 'M36,10 Q50,26 64,10 L80,10 L90,14 L88,28 Q84,38 80,36 L80,108 C65,112 35,112 20,108 L20,36 Q16,38 12,28 L10,14 Z'
@@ -361,6 +362,8 @@ function TeamsPage() {
           })()
         ))}
         </main>
+
+        <LandingFooter className="teams-scroll__footer" />
       </div>
     </div>
   )

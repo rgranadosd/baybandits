@@ -147,6 +147,11 @@
   gap: 26px;
 }
 
+.teams-scroll__footer {
+  width: min(1100px, 100%);
+  margin: 24px auto 6px;
+}
+
 .team-block {
   position: relative;
   overflow: hidden;
@@ -549,6 +554,10 @@
   .team-card {
     min-height: 0;
     padding: 8px 2px 4px;
+  }
+
+  .teams-scroll__footer {
+    margin-top: 16px;
   }
 }
 
