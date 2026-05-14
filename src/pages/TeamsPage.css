@@ -9,16 +9,14 @@
 .teams-page {
   position: relative;
   min-height: 100vh;
-  overflow-x: hidden;
   color: var(--bb-text);
   font-family: 'Montserrat', sans-serif;
-  isolation: isolate;
 }
 
 .teams-page__transition {
   position: fixed;
   inset: 0;
-  z-index: 12;
+  z-index: 14;
   pointer-events: none;
   background: #000;
   animation: teamsReveal 0.85s cubic-bezier(0.77, 0, 0.175, 1) forwards;
@@ -27,7 +25,7 @@
 .teams-page__bg {
   position: fixed;
   inset: 0;
-  z-index: -2;
+  z-index: 0;
   background-size: cover;
   background-position: center;
   filter: grayscale(0.65) saturate(0.95);
@@ -36,7 +34,7 @@
 .teams-page__overlay {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 1;
   background:
     radial-gradient(circle at 10% 18%, rgba(255, 78, 163, 0.26) 0%, rgba(255, 78, 163, 0) 42%),
     radial-gradient(circle at 88% 10%, rgba(42, 168, 255, 0.28) 0%, rgba(42, 168, 255, 0) 40%),
@@ -46,7 +44,7 @@
 .teams-header {
   position: sticky;
   top: 0;
-  z-index: 11;
+  z-index: 12;
   min-height: 76px;
   padding: max(12px, env(safe-area-inset-top)) clamp(14px, 2vw, 28px) 12px;
   display: flex;
@@ -123,7 +121,7 @@
 
 .teams-shell {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   width: min(1160px, calc(100% - 36px));
   margin: 20px auto 42px;
   display: flex;
