@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './CalendarPage.css'
 import EstartitCity from '../assets/cities/estartit.jpg'
@@ -15,6 +15,13 @@ import LandingFooter from '../components/LandingFooter'
 const LOGO_FALLBACK = `${import.meta.env.BASE_URL}logos/ESCUDO%20BAY%20BANDITS%202026.PNG`
 const EDGE_BACK_ZONE = 36
 const BACK_SWIPE_MIN_DISTANCE = 72
+
+const COUNTER_DURATIONS = {
+  circuits: 900,
+  totalEvents: 1200,
+  venues: 1400,
+  season: 1800,
+}
 
 const circuits = [
   {
@@ -81,9 +88,89 @@ const circuits = [
   },
 ] 
 
+function easeOutCubic(progress) {
+  return 1 - (1 - progress) ** 3
+}
+
+function useCountUpCounters(targets, shouldAnimate, prefersReducedMotion) {
+  const [counterValues, setCounterValues] = useState({
+    circuits: prefersReducedMotion ? targets.circuits : 0,
+    totalEvents: prefersReducedMotion ? targets.totalEvents : 0,
+    venues: prefersReducedMotion ? targets.venues : 0,
+    season: prefersReducedMotion ? targets.season : 0,
+  })
+
+  useEffect(() => {
+    if (prefersReducedMotion) {
+      setCounterValues(targets)
+      return
+    }
+
+    if (!shouldAnimate) {
+      setCounterValues({
+        circuits: 0,
+        totalEvents: 0,
+        venues: 0,
+        season: 0,
+      })
+      return
+    }
+
+    let frameId = 0
+    const startTime = performance.now()
+
+    const step = (now) => {
+      let animationDone = true
+
+      const nextValues = {
+        circuits: 0,
+        totalEvents: 0,
+        venues: 0,
+        season: 0,
+      }
+
+      Object.keys(targets).forEach((key) => {
+        const duration = COUNTER_DURATIONS[key] || 1200
+        const progress = Math.min((now - startTime) / duration, 1)
+        const easedProgress = easeOutCubic(progress)
+
+        nextValues[key] = Math.round(targets[key] * easedProgress)
+
+        if (progress < 1) {
+          animationDone = false
+        }
+      })
+
+      setCounterValues(nextValues)
+
+      if (!animationDone) {
+        frameId = window.requestAnimationFrame(step)
+      }
+    }
+
+    frameId = window.requestAnimationFrame(step)
+
+    return () => {
+      window.cancelAnimationFrame(frameId)
+    }
+  }, [
+    targets.circuits,
+    targets.totalEvents,
+    targets.venues,
+    targets.season,
+    shouldAnimate,
+    prefersReducedMotion,
+  ])
+
+  return counterValues
+}
+
 function CalendarPage() {
   const navigate = useNavigate()
   const swipeStartRef = useRef(null)
+  const heroRef = useRef(null)
+  const [hasStartedCounters, setHasStartedCounters] = useState(false)
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
 
   const stats = useMemo(() => {
     const totalEvents = circuits.reduce((acc, circuit) => acc + circuit.events.length, 0)
@@ -92,8 +179,52 @@ function CalendarPage() {
       circuits: circuits.length,
       totalEvents,
       venues: totalEvents,
+      season: 2026,
     }
   }, [])
+
+  const animatedStats = useCountUpCounters(stats, hasStartedCounters, prefersReducedMotion)
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const updatePreference = () => setPrefersReducedMotion(mediaQuery.matches)
+
+    updatePreference()
+    mediaQuery.addEventListener('change', updatePreference)
+
+    return () => {
+      mediaQuery.removeEventListener('change', updatePreference)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (prefersReducedMotion) {
+      setHasStartedCounters(true)
+      return
+    }
+
+    const heroNode = heroRef.current
+
+    if (!heroNode) {
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setHasStartedCounters(true)
+            observer.disconnect()
+          }
+        })
+      },
+      { threshold: 0.38 },
+    )
+
+    observer.observe(heroNode)
+
+    return () => observer.disconnect()
+  }, [prefersReducedMotion])
 
   const handleGoBack = useCallback(() => {
     if (window.history.length > 1) {
@@ -180,7 +311,7 @@ function CalendarPage() {
       </header>
 
       <main className="calendar-shell">
-        <section className="calendar-hero" aria-label="Resumen calendario 2026">
+        <section className="calendar-hero" aria-label="Resumen calendario 2026" ref={heroRef}>
           <p className="calendar-hero__kicker">Bay Bandits Beach Handball</p>
           <h1>
             Calendario Oficial <span className="calendar-hero__year">2026</span>
@@ -189,19 +320,19 @@ function CalendarPage() {
           <dl className="calendar-hero__stats">
             <div>
               <dt>Circuitos</dt>
-              <dd>{stats.circuits}</dd>
+              <dd>{prefersReducedMotion ? stats.circuits : animatedStats.circuits}</dd>
             </div>
             <div>
               <dt>Pruebas</dt>
-              <dd>{stats.totalEvents}</dd>
+              <dd>{prefersReducedMotion ? stats.totalEvents : animatedStats.totalEvents}</dd>
             </div>
             <div>
               <dt>Sedes</dt>
-              <dd>{stats.venues}</dd>
+              <dd>{prefersReducedMotion ? stats.venues : animatedStats.venues}</dd>
             </div>
             <div>
               <dt>Temporada</dt>
-              <dd>2026</dd>
+              <dd>{prefersReducedMotion ? stats.season : animatedStats.season}</dd>
             </div>
           </dl>
         </section>

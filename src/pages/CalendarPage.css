@@ -178,6 +178,8 @@
   font-weight: 800;
   color: #f3f2ee;
   line-height: 1;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
 }
 
 .calendar-hero__stats div:last-child dd {
