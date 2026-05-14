@@ -1,6 +1,69 @@
 import { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './TeamsPage.css'
+
+const COUNTER_DURATIONS = {
+  teams: 900,
+  players: 1400,
+  coaches: 1100,
+  season: 1800,
+}
+
+function easeOutCubic(progress) {
+  return 1 - (1 - progress) ** 3
+}
+
+function useCountUpCounters(targets, shouldAnimate, prefersReducedMotion) {
+  const [counterValues, setCounterValues] = useState({
+    teams: 0,
+    players: 0,
+    coaches: 0,
+    season: 0,
+  })
+
+  useEffect(() => {
+    if (prefersReducedMotion) {
+      setCounterValues(targets)
+      return
+    }
+
+    if (!shouldAnimate) {
+      setCounterValues({ teams: 0, players: 0, coaches: 0, season: 0 })
+      return
+    }
+
+    let frameId = 0
+    const startTime = performance.now()
+
+    const step = (now) => {
+      let animationDone = true
+      const nextValues = { teams: 0, players: 0, coaches: 0, season: 0 }
+
+      Object.keys(targets).forEach((key) => {
+        const duration = COUNTER_DURATIONS[key] || 1200
+        const progress = Math.min((now - startTime) / duration, 1)
+        const easedProgress = easeOutCubic(progress)
+        nextValues[key] = Math.round(targets[key] * easedProgress)
+        if (progress < 1) animationDone = false
+      })
+
+      setCounterValues(nextValues)
+      if (!animationDone) frameId = window.requestAnimationFrame(step)
+    }
+
+    frameId = window.requestAnimationFrame(step)
+    return () => window.cancelAnimationFrame(frameId)
+  }, [
+    targets.teams,
+    targets.players,
+    targets.coaches,
+    targets.season,
+    shouldAnimate,
+    prefersReducedMotion,
+  ])
+
+  return counterValues
+}
 import { rosters } from '../data/rosters.js'
 import Photo7 from '../assets/photos/Photo7.jpeg'
 import LogoBB from '../assets/logos/baybandits.png'
@@ -113,8 +176,11 @@ function TeamsPage() {
   const navigate = useNavigate()
   const sectionRefs = useRef(new Map())
   const swipeStartRef = useRef(null)
+  const heroRef = useRef(null)
   const [visibleSections, setVisibleSections] = useState(() => ({ [rosters[0].id]: true }))
   const [parallaxOffsets, setParallaxOffsets] = useState({})
+  const [hasStartedCounters, setHasStartedCounters] = useState(false)
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
 
   const stats = useMemo(() => {
     const totalPlayers = rosters.reduce((acc, team) => acc + team.players.length, 0)
@@ -126,6 +192,38 @@ function TeamsPage() {
       season: 2026,
     }
   }, [])
+
+  const animatedStats = useCountUpCounters(stats, hasStartedCounters, prefersReducedMotion)
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const updatePreference = () => setPrefersReducedMotion(mediaQuery.matches)
+    updatePreference()
+    mediaQuery.addEventListener('change', updatePreference)
+    return () => mediaQuery.removeEventListener('change', updatePreference)
+  }, [])
+
+  useEffect(() => {
+    if (prefersReducedMotion) {
+      setHasStartedCounters(true)
+      return
+    }
+    const heroNode = heroRef.current
+    if (!heroNode) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setHasStartedCounters(true)
+            observer.disconnect()
+          }
+        })
+      },
+      { threshold: 0.38 },
+    )
+    observer.observe(heroNode)
+    return () => observer.disconnect()
+  }, [prefersReducedMotion])
 
   const handleGoBack = useCallback(() => {
     if (window.history.length > 1) {
@@ -315,7 +413,7 @@ function TeamsPage() {
       </header>
 
       <main className="teams-shell">
-        <section className="teams-hero" aria-label="Resumen equipos 2026">
+        <section className="teams-hero" aria-label="Resumen equipos 2026" ref={heroRef}>
           <p className="teams-hero__kicker">Bay Bandits Beach Handball</p>
           <h1>
             Nuestros Equipos <span className="teams-hero__year">2026</span>
@@ -324,19 +422,19 @@ function TeamsPage() {
           <dl className="teams-hero__stats">
             <div>
               <dt>Equipos</dt>
-              <dd>{stats.teams}</dd>
+              <dd>{animatedStats.teams}</dd>
             </div>
             <div>
               <dt>Jugadores</dt>
-              <dd>{stats.players}</dd>
+              <dd>{animatedStats.players}</dd>
             </div>
             <div>
               <dt>Entrenadores</dt>
-              <dd>{stats.coaches}</dd>
+              <dd>{animatedStats.coaches}</dd>
             </div>
             <div>
               <dt>Temporada</dt>
-              <dd>{stats.season}</dd>
+              <dd>{animatedStats.season}</dd>
             </div>
           </dl>
         </section>

@@ -9,6 +9,8 @@
 .teams-page {
   position: relative;
   min-height: 100vh;
+  background: var(--bb-ink);
+  overflow-x: hidden;
   color: var(--bb-text);
   font-family: 'Montserrat', sans-serif;
 }
@@ -192,6 +194,8 @@
   font-weight: 800;
   color: #f3f2ee;
   line-height: 1;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
 }
 
 .teams-hero__stats div:last-child dd {
