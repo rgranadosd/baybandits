@@ -59,6 +59,7 @@ const circuits = [
         name: 'OAR Gràcia Sabadell',
         location: 'Sabadell',
         image: SabadellCity,
+        status: 'played',
       },
       {
         dates: '20-21 junio',
@@ -357,7 +358,7 @@ function CalendarPage() {
                 {circuit.events.map((event, eventIndex) => (
                   <li
                     key={`${circuit.id}-${event.dates}-${event.name}`}
-                    className="calendar-event-card"
+                    className={`calendar-event-card${event.status === 'played' ? ' calendar-event-card--played' : ''}`}
                     style={{ '--event-order': eventIndex }}
                   >
                     <figure className="calendar-event-card__media">
@@ -368,6 +369,9 @@ function CalendarPage() {
                     <div className="calendar-event-card__body">
                       <div className="calendar-event-card__meta">
                         <span className="calendar-event-card__dates">{event.dates}</span>
+                        {event.status === 'played' ? (
+                          <span className="calendar-event-card__status">Jugado</span>
+                        ) : null}
                       </div>
                       <h3>{event.name}</h3>
                     </div>
